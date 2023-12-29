@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import {} from "flowbite";
+import { FwbInput } from "flowbite-vue";
 import { RegisterRequest } from "@/types/request.type";
-import Input from "@components/global/Input.vue";
 
 const form = ref({} as RegisterRequest);
 </script>
@@ -33,55 +32,81 @@ const form = ref({} as RegisterRequest);
       class="w-full lg:w-1/2 bg-sky-blue flex flex-col items-center justify-center py-8"
     >
       <h1 class="text-center">Register Account</h1>
-      <form class="flex flex-col justify-center w-4/5 xl:w-3/5 gap-12 py-8">
-        <div class="flex flex-col gap-4">
-          <Input
+      <form class="flex flex-col justify-center w-4/5 gap-12 py-8">
+        <div
+          class="grid grid-cols-1 grid-rows-6 lg:grid-cols-2 lg:grid-rows-3 gap-x-8 gap-y-4"
+        >
+          <FwbInput
             v-model="form.first_name"
             id="first_name"
             label="First name"
             placeholder="First name"
             type="text"
             required
-          />
-          <Input
+          >
+            <template #prefix>
+              <img src="/icons/user_solid.svg" class="w-4" />
+            </template>
+          </FwbInput>
+          <FwbInput
             v-model="form.last_name"
             id="last_name"
-            label="Last name"
+            label="Last name (Optional)"
             placeholder="Last name"
             type="text"
-          />
-          <Input
+          >
+            <template #prefix>
+              <img src="/icons/users_solid.svg" class="w-5" />
+            </template>
+          </FwbInput>
+          <FwbInput
             v-model="form.email"
             id="email"
             label="Email"
             placeholder="Email"
             type="email"
             required
-          />
-          <Input
+          >
+            <template #prefix>
+              <img src="/icons/envelope_solid.svg" class="w-5" />
+            </template>
+          </FwbInput>
+          <FwbInput
             v-model="form.username"
             id="username"
             label="Username"
             placeholder="Username"
             type="text"
             required
-          />
-          <Input
+          >
+            <template #prefix>
+              <img src="/icons/user_settings_solid.svg" class="w-5" />
+            </template>
+          </FwbInput>
+          <FwbInput
             v-model="form.password"
             id="password"
             label="Password"
             placeholder="Password"
             type="password"
             required
-          />
-          <Input
+          >
+            <template #prefix>
+              <img src="/icons/lock_solid.svg" class="w-4" />
+            </template>
+          </FwbInput>
+          <FwbInput
             v-model="form.password_confirmation"
             id="password_confirmation"
             label="Confirm password"
             placeholder="Confirm password"
             type="password"
             required
-          />
+          >
+            <template #prefix>
+              <img src="/icons/lock_solid.svg" class="w-4" />
+            </template>
+          </FwbInput>
         </div>
 
         <div class="flex flex-col w-full items-center gap-4">

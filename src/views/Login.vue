@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import {} from "flowbite";
+import { FwbInput } from "flowbite-vue";
 import { LoginRequest } from "@/types/request.type";
-import InputWithAddon from "@components/global/InputWithAddon.vue";
 
 const form = ref({} as LoginRequest);
 </script>
@@ -40,7 +39,7 @@ const form = ref({} as LoginRequest);
         </div>
 
         <div class="flex flex-col gap-4">
-          <InputWithAddon
+          <FwbInput
             v-model="form.username"
             id="username"
             label="Username"
@@ -48,11 +47,11 @@ const form = ref({} as LoginRequest);
             type="text"
             required
           >
-            <template #addon>
+            <template #prefix class="bg-yellow-mustard">
               <img src="/icons/user_solid.svg" class="w-4" />
             </template>
-          </InputWithAddon>
-          <InputWithAddon
+          </FwbInput>
+          <FwbInput
             v-model="form.password"
             id="password"
             label="Password"
@@ -60,10 +59,10 @@ const form = ref({} as LoginRequest);
             type="text"
             required
           >
-            <template #addon>
+            <template #prefix>
               <img src="/icons/lock_solid.svg" class="w-4" />
             </template>
-          </InputWithAddon>
+          </FwbInput>
         </div>
 
         <div class="flex flex-col w-full items-center gap-4">
