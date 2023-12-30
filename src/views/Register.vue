@@ -8,7 +8,7 @@ import { storeToRefs } from "pinia";
 const authStore = useAuthStore();
 const form = ref({} as RegisterRequest);
 
-const { loadingRegister, errDetailRegister } = storeToRefs(authStore);
+const { isLoadingRegister, errorDetailRegister } = storeToRefs(authStore);
 
 const handleRegister = () => {
   authStore.postRegister(form.value);
@@ -79,17 +79,17 @@ const handleRegister = () => {
             type="email"
             required
             :validation-status="
-              errDetailRegister.hasOwnProperty('email') ? 'error' : undefined
+              errorDetailRegister.hasOwnProperty('email') ? 'error' : undefined
             "
           >
             <template #prefix>
               <img src="/icons/envelope_solid.svg" class="w-5" />
             </template>
             <template
-              v-if="errDetailRegister.hasOwnProperty('email')"
+              v-if="errorDetailRegister.hasOwnProperty('email')"
               #validationMessage
             >
-              {{ errDetailRegister.email[0] }}
+              {{ errorDetailRegister.email[0] }}
             </template>
           </FwbInput>
           <FwbInput
@@ -100,17 +100,19 @@ const handleRegister = () => {
             type="text"
             required
             :validation-status="
-              errDetailRegister.hasOwnProperty('username') ? 'error' : undefined
+              errorDetailRegister.hasOwnProperty('username')
+                ? 'error'
+                : undefined
             "
           >
             <template #prefix>
               <img src="/icons/user_settings_solid.svg" class="w-5" />
             </template>
             <template
-              v-if="errDetailRegister.hasOwnProperty('username')"
+              v-if="errorDetailRegister.hasOwnProperty('username')"
               #validationMessage
             >
-              {{ errDetailRegister.username[0] }}
+              {{ errorDetailRegister.username[0] }}
             </template>
           </FwbInput>
           <FwbInput
@@ -142,7 +144,7 @@ const handleRegister = () => {
         <div class="flex flex-col w-full items-center gap-4">
           <FwbButton
             type="submit"
-            :loading="loadingRegister"
+            :loading="isLoadingRegister"
             class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full text-base font-bold inline-flex items-center justify-center"
           >
             Register

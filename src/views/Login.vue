@@ -8,7 +8,7 @@ import { storeToRefs } from "pinia";
 const authStore = useAuthStore();
 const form = ref({} as LoginRequest);
 
-const { loadingLogin } = storeToRefs(authStore);
+const { isLoadingLogin } = storeToRefs(authStore);
 
 const handleLogin = () => {
   authStore.postLogin(form.value);
@@ -68,7 +68,7 @@ const handleLogin = () => {
             id="password"
             label="Password"
             placeholder="Password"
-            type="text"
+            type="password"
             required
           >
             <template #prefix>
@@ -80,7 +80,7 @@ const handleLogin = () => {
         <div class="flex flex-col w-full items-center gap-4">
           <FwbButton
             type="submit"
-            :loading="loadingLogin"
+            :loading="isLoadingLogin"
             class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full text-base font-bold inline-flex items-center justify-center"
           >
             Login

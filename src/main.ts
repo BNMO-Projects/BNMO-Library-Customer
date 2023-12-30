@@ -6,8 +6,10 @@ import { createPinia } from "pinia";
 import { router } from "@/router/router";
 import axios from "axios";
 import Toast, { PluginOptions } from "vue-toastification";
+import PiniaPluginPersistedState from "pinia-plugin-persistedstate";
 
 const pinia = createPinia();
+pinia.use(PiniaPluginPersistedState);
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_APP_URL;
 
