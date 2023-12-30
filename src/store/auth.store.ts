@@ -14,6 +14,7 @@ export const useAuthStore = defineStore("auth", {
       errRegister: "" || undefined,
       errDetailRegister: {} as ErrorRegisterResponse,
 
+      username: "",
       refreshToken: "",
       loadingLogin: false,
       errLogin: "" || undefined,
@@ -26,6 +27,7 @@ export const useAuthStore = defineStore("auth", {
     isLoadingRegister: (state) => state.loadingRegister,
     errorRegister: (state) => state.errRegister,
 
+    getUsername: (state) => state.username,
     getRefreshToken: (state) => state.refreshToken,
     isLoadingLogin: (state) => state.loadingLogin,
     errorLogin: (state) => state.errLogin,
@@ -67,6 +69,7 @@ export const useAuthStore = defineStore("auth", {
 
         axios.defaults.headers.common.Authorization = `Bearer ${response.data.access_token}`;
 
+        this.username = response.data.username;
         this.refreshToken = response.data.refresh_token;
         this.loadingLogin = false;
 
