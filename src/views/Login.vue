@@ -1,9 +1,18 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { FwbInput } from "flowbite-vue";
+import { FwbInput, FwbButton } from "flowbite-vue";
 import { LoginRequest } from "@/types/request.type";
+import { useAuthStore } from "@/store/auth.store";
+import { storeToRefs } from "pinia";
 
+const authStore = useAuthStore();
 const form = ref({} as LoginRequest);
+
+const { loadingLogin } = storeToRefs(authStore);
+
+const handleLogin = () => {
+  authStore.postLogin(form.value);
+};
 </script>
 
 <template>
@@ -32,7 +41,10 @@ const form = ref({} as LoginRequest);
         class="w-32 fixed top-4 right-4 lg:top-8 lg:right-8"
       />
 
-      <form class="flex flex-col w-4/5 lg:w-3/5 gap-12">
+      <form
+        class="flex flex-col w-4/5 lg:w-3/5 gap-12"
+        @submit.prevent="handleLogin"
+      >
         <div class="flex flex-col text-center gap-4">
           <h1>Welcome back!</h1>
           <h2>Please login to continue</h2>
@@ -66,12 +78,13 @@ const form = ref({} as LoginRequest);
         </div>
 
         <div class="flex flex-col w-full items-center gap-4">
-          <button
+          <FwbButton
             type="submit"
-            class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out focus:ring-4 focus:outline-none focus:ring-blue-300 font-bold rounded-lg w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            :loading="loadingLogin"
+            class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full text-base font-bold inline-flex items-center justify-center"
           >
             Login
-          </button>
+          </FwbButton>
           <p>
             Don't have an account?
             <RouterLink

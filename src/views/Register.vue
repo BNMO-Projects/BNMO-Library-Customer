@@ -1,9 +1,18 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { FwbInput } from "flowbite-vue";
+import { FwbButton, FwbInput } from "flowbite-vue";
 import { RegisterRequest } from "@/types/request.type";
+import { useAuthStore } from "@/store/auth.store";
+import { storeToRefs } from "pinia";
 
+const authStore = useAuthStore();
 const form = ref({} as RegisterRequest);
+
+const { loadingRegister, errDetailRegister } = storeToRefs(authStore);
+
+const handleRegister = () => {
+  authStore.postRegister(form.value);
+};
 </script>
 
 <template>
@@ -32,7 +41,10 @@ const form = ref({} as RegisterRequest);
       class="w-full lg:w-1/2 bg-sky-blue flex flex-col items-center justify-center py-8"
     >
       <h1 class="text-center">Register Account</h1>
-      <form class="flex flex-col justify-center w-4/5 gap-12 py-8">
+      <form
+        class="flex flex-col justify-center w-4/5 gap-12 py-8"
+        @submit.prevent="handleRegister"
+      >
         <div
           class="grid grid-cols-1 grid-rows-6 lg:grid-cols-2 lg:grid-rows-3 gap-x-8 gap-y-4"
         >
@@ -66,9 +78,18 @@ const form = ref({} as RegisterRequest);
             placeholder="Email"
             type="email"
             required
+            :validation-status="
+              errDetailRegister.hasOwnProperty('email') ? 'error' : undefined
+            "
           >
             <template #prefix>
               <img src="/icons/envelope_solid.svg" class="w-5" />
+            </template>
+            <template
+              v-if="errDetailRegister.hasOwnProperty('email')"
+              #validationMessage
+            >
+              {{ errDetailRegister.email[0] }}
             </template>
           </FwbInput>
           <FwbInput
@@ -78,9 +99,18 @@ const form = ref({} as RegisterRequest);
             placeholder="Username"
             type="text"
             required
+            :validation-status="
+              errDetailRegister.hasOwnProperty('username') ? 'error' : undefined
+            "
           >
             <template #prefix>
               <img src="/icons/user_settings_solid.svg" class="w-5" />
+            </template>
+            <template
+              v-if="errDetailRegister.hasOwnProperty('username')"
+              #validationMessage
+            >
+              {{ errDetailRegister.username[0] }}
             </template>
           </FwbInput>
           <FwbInput
@@ -110,12 +140,13 @@ const form = ref({} as RegisterRequest);
         </div>
 
         <div class="flex flex-col w-full items-center gap-4">
-          <button
+          <FwbButton
             type="submit"
-            class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out focus:ring-4 focus:outline-none focus:ring-blue-300 font-bold rounded-lg w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            :loading="loadingRegister"
+            class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full text-base font-bold inline-flex items-center justify-center"
           >
             Register
-          </button>
+          </FwbButton>
           <p>
             Already have an account?
             <RouterLink

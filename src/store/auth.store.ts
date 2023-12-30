@@ -1,5 +1,6 @@
 import { router } from "@/router/router";
 import { LoginRequest, RegisterRequest } from "@/types/request.type";
+import { ErrorRegisterResponse } from "@/types/response.type";
 import axios, { AxiosError } from "axios";
 import { defineStore } from "pinia";
 import { useToast } from "vue-toastification";
@@ -11,6 +12,7 @@ export const useAuthStore = defineStore("auth", {
     return {
       loadingRegister: false,
       errRegister: "" || undefined,
+      errDetailRegister: {} as ErrorRegisterResponse,
 
       refreshToken: "",
       loadingLogin: false,
@@ -47,6 +49,8 @@ export const useAuthStore = defineStore("auth", {
       } catch (error) {
         if (error instanceof AxiosError) {
           this.errRegister = error.response?.data.message;
+          this.errDetailRegister = error.response?.data.error;
+
           this.loadingRegister = false;
 
           toast.error(this.errRegister);
