@@ -51,8 +51,8 @@ watch(page, () => {
 
 <template>
   <div class="flex flex-col gap-4">
-    <div class="flex w-full gap-4">
-      <div class="w-[75%]">
+    <div class="flex flex-col lg:flex-row w-full gap-4">
+      <div class="lg:w-[75%]">
         <FwbInput
           v-model="query.searchQuery"
           label="Book title"
@@ -69,7 +69,7 @@ watch(page, () => {
           </template>
         </FwbInput>
       </div>
-      <div class="w-[25%]">
+      <div class="lg:w-[25%]">
         <FwbInput
           v-model="query.authorQuery"
           label="Author"
@@ -83,7 +83,7 @@ watch(page, () => {
         </FwbInput>
       </div>
     </div>
-    <div class="flex w-full gap-4 items-end">
+    <div class="flex flex-col lg:flex-row w-full gap-4 items-end">
       <SearchableDropdown
         placeholder="Search category"
         :options="getCategories"
@@ -114,7 +114,7 @@ watch(page, () => {
         @searchQuery="(query) => bookStore.getLanguagesList(query)"
         @selectedValue="(value) => (query.language = value)"
       />
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2 w-full lg:w-1/5">
         <p class="text-sm">Book Type</p>
         <ul class="flex gap-4">
           <li>
@@ -144,7 +144,7 @@ watch(page, () => {
         </ul>
       </div>
       <FwbButton
-        class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-1/5 h-fit text-base font-bold inline-flex items-center justify-center"
+        class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-1/5 h-fit text-base font-bold inline-flex items-center justify-center"
         @click="handleSearch"
       >
         Search

@@ -55,7 +55,7 @@ onClickOutside(dropdown, () => (open.value = false));
 </script>
 
 <template>
-  <div class="w-1/5">
+  <div class="w-full lg:w-1/5">
     <p class="text-sm mb-2">{{ label }}</p>
     <div
       ref="dropdown"

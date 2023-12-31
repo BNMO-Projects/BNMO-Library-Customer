@@ -11,7 +11,7 @@ defineProps({
 
 <template>
   <RouterLink :to="'/book-detail/' + book.id">
-    <div class="flex flex-col w-44 gap-1 hover:cursor-pointer">
+    <div class="flex flex-col w-32 lg:w-44 gap-1 hover:cursor-pointer">
       <img :src="book.book_cover" :alt="book.id" class="rounded-md" />
       <p class="font-bold truncate">{{ book.title }}</p>
       <p>{{ book.author_name }}</p>
