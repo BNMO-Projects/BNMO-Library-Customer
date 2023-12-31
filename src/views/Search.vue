@@ -70,7 +70,7 @@ watch(page, () => {
       <div v-if="isLoadingBooks" class="flex justify-center gap-4">
         <FwbSpinner size="12" />
       </div>
-      <div v-else class="flex flex-col gap-8">
+      <div v-else class="flex flex-col gap-4">
         <h2>Search result</h2>
         <div
           :class="`lg:grid-cols-5 lg:grid-rows-${rowsLg(
@@ -79,9 +79,7 @@ watch(page, () => {
           )} md:grid-cols-4 md:grid-rows-${rowsMd(
             getBooksMetadata.total,
             page
-          )} grid-cols-2 grid-rows-${Math.max(
-            rowsBase(getBooksMetadata.total, page)
-          )}`"
+          )} grid-cols-2 grid-rows-${rowsBase(getBooksMetadata.total, page)}`"
           class="grid gap-8"
         >
           <BookCard v-for="book in getBooks" :key="book.id" :book="book" />
