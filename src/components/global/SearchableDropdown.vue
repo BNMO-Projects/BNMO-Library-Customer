@@ -38,7 +38,7 @@ const dropdown = ref(null);
 
 const emit = defineEmits<{
   (event: "searchQuery", payload: string): void;
-  (event: "selectedValue", payload: string): void;
+  (event: "selectedValue", payload: string | undefined): void;
 }>();
 
 const handleQueryChange = debounce((event: Event) => {
@@ -49,6 +49,11 @@ const handleSelectedValue = (value: any) => {
   open.value = false;
   query.value = value[optionLabel.value];
   emit("selectedValue", value[trackBy.value]);
+};
+
+const handleRemoveSelected = () => {
+  query.value = undefined;
+  emit("selectedValue", undefined);
 };
 
 onClickOutside(dropdown, () => (open.value = false));
@@ -71,6 +76,12 @@ onClickOutside(dropdown, () => (open.value = false));
           @input="handleQueryChange($event)"
           :placeholder="placeholder"
           class="border-none focus:border-none focus:ring-0 w-full"
+        />
+        <img
+          v-if="!isLoading && query"
+          src="/icons/close_outline.svg"
+          class="w-3 hover:cursor-pointer mr-3"
+          @click="handleRemoveSelected"
         />
         <img
           v-if="!isLoading"
