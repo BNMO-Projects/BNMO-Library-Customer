@@ -2,7 +2,8 @@ import { CatalogSearchQuery } from "@/types/request.type";
 import {
   PageMetadata,
   CatalogMetadataResponse,
-  BookListResponse
+  BookListResponse,
+  BookDetailResponse
 } from "@/types/response.type";
 import axios, { AxiosError } from "axios";
 import { defineStore } from "pinia";
@@ -20,15 +21,16 @@ export const useBookStore = defineStore("book", {
 
       categories: [] as Array<CatalogMetadataResponse>,
       loadingCategories: false,
-      errCategories: "" || undefined,
 
       genres: [] as Array<CatalogMetadataResponse>,
       loadingGenres: false,
-      errGenres: "" || undefined,
 
       languages: [] as Array<CatalogMetadataResponse>,
       loadingLanguages: false,
-      errLanguages: "" || undefined
+
+      bookDetail: {} as BookDetailResponse,
+      loadingBookDetail: false,
+      errBookDetail: "" || undefined
     };
   },
   getters: {
@@ -39,15 +41,16 @@ export const useBookStore = defineStore("book", {
 
     getCategories: (state) => state.categories,
     isLoadingCategories: (state) => state.loadingCategories,
-    errorCategories: (state) => state.errCategories,
 
     getGenres: (state) => state.genres,
     isLoadingGenres: (state) => state.loadingGenres,
-    errorGenres: (state) => state.errGenres,
 
     getLanguages: (state) => state.languages,
     isLoadingLanguages: (state) => state.loadingLanguages,
-    errorLanguages: (state) => state.errLanguages
+
+    getBookDetail: (state) => state.bookDetail,
+    isLoadingBookDetail: (state) => state.loadingBookDetail,
+    errorBookDetail: (state) => state.errBookDetail
   },
   actions: {
     async getBooksList(query: CatalogSearchQuery) {
@@ -127,6 +130,22 @@ export const useBookStore = defineStore("book", {
           this.loadingLanguages = false;
 
           toast.error("Failed to fetch languages");
+        }
+      }
+    },
+
+    async getBookDetails(id: string) {
+      this.loadingBookDetail = true;
+      try {
+        const response = await axios.get(`/catalog/${id}`);
+
+        this.bookDetail = response.data.data;
+        this.loadingBookDetail = false;
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          this.loadingBookDetail = false;
+
+          toast.error(error.response?.data.message);
         }
       }
     }

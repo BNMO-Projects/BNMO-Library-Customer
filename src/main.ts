@@ -37,7 +37,6 @@ axios.interceptors.response.use(
         error.request.responseURL.includes("/refresh-token") &&
         error.response?.status === 401
       ) {
-        console.log("masuk logout");
         authStore.postLogout();
       } else if (
         !error.request.responseURL.includes("/login") &&
@@ -45,7 +44,6 @@ axios.interceptors.response.use(
         error.config &&
         !(error.config as CustomAxiosRequestConfig)._retry
       ) {
-        console.log("masuk sini");
         (error.config as CustomAxiosRequestConfig)._retry = true;
 
         if (!refreshPromise) {
@@ -60,36 +58,6 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-// axios.interceptors.response.use(
-//   function (response) {
-//     return response;
-//   },
-//   async function (error) {
-//     if (error instanceof AxiosError) {
-//       if (
-//         !error.request.responseURL.includes("/login") &&
-//         error.response?.status === 401 &&
-//         error.config &&
-//         // @ts-expect-error Unknown _retry on error.config
-//         error.config._retry
-//       ) {
-//         console.log("masuk sini");
-//         // @ts-expect-error Unknown _retry on error.config
-//         error.config._retry = true;
-//         const authStore = useAuthStore();
-//         if (!refreshPromise) {
-//           refreshPromise = authStore.refreshAccessToken().finally(clearPromise);
-//         }
-
-//         await refreshPromise;
-//         return axios(error.config);
-//       }
-//     }
-
-//     return Promise.reject(error);
-//   }
-// );
 
 const toastOptions: PluginOptions = {
   timeout: 3000

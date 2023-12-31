@@ -145,7 +145,7 @@ const handleRegister = () => {
           <FwbButton
             type="submit"
             :loading="isLoadingRegister"
-            class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full text-base font-bold inline-flex items-center justify-center"
+            class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full text-base font-bold inline-flex items-center justify-center text-black"
           >
             Register
           </FwbButton>
