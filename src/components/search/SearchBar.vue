@@ -41,7 +41,9 @@ onMounted(() => {
 
 const handleSearch = () => {
   query.value.currentPage = 1;
-  router.push({ name: "Search", query: { page: 1 } });
+  if (page.value !== 1) {
+    router.push({ name: "Search", query: { page: 1 } });
+  }
   bookStore.getBooksList(query.value);
 };
 
