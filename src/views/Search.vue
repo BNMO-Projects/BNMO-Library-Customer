@@ -22,6 +22,41 @@ onMounted(() => {
   }
 });
 
+const rowsLg = (total: number, page: number) => {
+  let rows = 2;
+  if (total - (page - 1) * 10 < 5) {
+    rows = 1;
+  }
+
+  return rows;
+};
+
+const rowsMd = (total: number, page: number) => {
+  let rows = 3;
+  if (total - (page - 1) * 10 < 8) {
+    rows = 2;
+  } else if (total - (page - 1) * 10 < 4) {
+    rows = 1;
+  }
+
+  return rows;
+};
+
+const rowsBase = (total: number, page: number) => {
+  let rows = 5;
+  if (total - (page - 1) * 10 < 8) {
+    rows = 4;
+  } else if (total - (page - 1) * 10 < 6) {
+    rows = 3;
+  } else if (total - (page - 1) * 10 < 4) {
+    rows = 2;
+  } else if (total - (page - 1) * 10 < 2) {
+    rows = 1;
+  }
+
+  return rows;
+};
+
 watch(page, () => {
   router.push({ name: "Search", query: { page: page.value } });
 });
@@ -35,10 +70,19 @@ watch(page, () => {
       <div v-if="isLoadingBooks" class="flex justify-center gap-4">
         <FwbSpinner size="12" />
       </div>
-      <div v-else class="flex flex-col gap-4">
+      <div v-else class="flex flex-col gap-8">
         <h2>Search result</h2>
         <div
-          class="grid grid-cols-2 grid-rows-5 md:grid-cols-4 md:grid-rows-3 lg:grid-cols-5 lg:grid-rows-2 gap-8"
+          :class="`lg:grid-cols-5 lg:grid-rows-${rowsLg(
+            getBooksMetadata.total,
+            page
+          )} md:grid-cols-4 md:grid-rows-${rowsMd(
+            getBooksMetadata.total,
+            page
+          )} grid-cols-2 grid-rows-${Math.max(
+            rowsBase(getBooksMetadata.total, page)
+          )}`"
+          class="grid gap-8"
         >
           <BookCard v-for="book in getBooks" :key="book.id" :book="book" />
         </div>

@@ -5,6 +5,7 @@ import { CatalogSearchQuery } from "@/types/request.type";
 import { useBookStore } from "@/store/book.store";
 import { storeToRefs } from "pinia";
 import SearchableDropdown from "../global/SearchableDropdown.vue";
+import { router } from "@/router/router";
 
 const props = defineProps({
   page: {
@@ -39,11 +40,12 @@ onMounted(() => {
 });
 
 const handleSearch = () => {
+  query.value.currentPage = 1;
+  router.push({ name: "Search", query: { page: 1 } });
   bookStore.getBooksList(query.value);
 };
 
 watch(page, () => {
-  console.log(page.value);
   query.value.currentPage = page.value;
   bookStore.getBooksList(query.value);
 });
