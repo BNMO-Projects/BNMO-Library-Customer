@@ -1,10 +1,19 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, toRefs } from "vue";
 import { FwbButton, FwbInput, FwbRadio } from "flowbite-vue";
 import { CatalogSearchQuery } from "@/types/request.type";
 import { useBookStore } from "@/store/book.store";
 import { storeToRefs } from "pinia";
 import SearchableDropdown from "../global/SearchableDropdown.vue";
+
+const props = defineProps({
+  page: {
+    type: Number,
+    required: true
+  }
+});
+
+const { page } = toRefs(props);
 
 const bookStore = useBookStore();
 const query = ref({} as CatalogSearchQuery);
@@ -23,23 +32,21 @@ onMounted(() => {
   bookStore.getGenresList(undefined);
   bookStore.getLanguagesList(undefined);
 
+  query.value.currentPage = page.value;
+  query.value.limitPerPage = 10;
   query.value.bookType = "ALL";
+  bookStore.getBooksList(query.value);
 });
 
 const handleSearch = () => {
   bookStore.getBooksList(query.value);
 };
 
-watch(
-  query.value,
-  () => {
-    console.log(query.value);
-  },
-  {
-    deep: true,
-    immediate: true
-  }
-);
+watch(page, () => {
+  console.log(page.value);
+  query.value.currentPage = page.value;
+  bookStore.getBooksList(query.value);
+});
 </script>
 
 <template>
