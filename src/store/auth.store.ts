@@ -20,7 +20,9 @@ export const useAuthStore = defineStore("auth", {
       errLogin: "" || undefined,
 
       loadingLogout: false,
-      errLogout: "" || undefined
+      errLogout: "" || undefined,
+
+      loadingRefreshToken: false
     };
   },
   getters: {
@@ -34,7 +36,9 @@ export const useAuthStore = defineStore("auth", {
     errorLogin: (state) => state.errLogin,
 
     isLoadingLogout: (state) => state.loadingLogout,
-    errorLogout: (state) => state.errLogout
+    errorLogout: (state) => state.errLogout,
+
+    isLoadingRefreshToken: (state) => state.loadingRefreshToken
   },
   actions: {
     async postRegister(payload: RegisterRequest) {
@@ -68,13 +72,12 @@ export const useAuthStore = defineStore("auth", {
           data: payload
         });
 
-        axios.defaults.headers.common.Authorization = `Bearer ${response.data.access_token}`;
+        axios.defaults.headers.common["Authorization"] =
+          `Bearer ${response.data.access_token}`;
 
         this.username = response.data.username;
         this.refreshToken = response.data.refresh_token;
         this.loadingLogin = false;
-
-        localStorage.setItem("refresh_token", this.refreshToken);
 
         void router.push({ name: "Home" });
         toast.success(response.data.message);
@@ -97,6 +100,27 @@ export const useAuthStore = defineStore("auth", {
       toast.success("Logout successful");
 
       this.loadingLogout = false;
+    },
+    async refreshAccessToken() {
+      this.loadingRefreshToken = true;
+
+      try {
+        const response = await axios.post("/auth/refresh-token", {
+          refresh_token: this.refreshToken
+        });
+
+        axios.defaults.headers.common["Authorization"] =
+          `Bearer ${response.data.token}`;
+
+        this.loadingRefreshToken = false;
+        toast.success("Session refreshed");
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          void router.push({ name: "Login" });
+          this.loadingRefreshToken = false;
+          toast.error(error.response?.data.message);
+        }
+      }
     }
   },
   persist: true
