@@ -81,7 +81,7 @@ const handleLogin = () => {
           <FwbButton
             type="submit"
             :loading="isLoadingLogin"
-            class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full text-base font-bold inline-flex items-center justify-center"
+            class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full text-base font-bold inline-flex items-center justify-center text-black"
           >
             Login
           </FwbButton>

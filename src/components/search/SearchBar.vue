@@ -148,7 +148,7 @@ watch(page, () => {
         </ul>
       </div>
       <FwbButton
-        class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-1/5 h-fit text-base font-bold inline-flex items-center justify-center"
+        class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-1/5 h-fit text-base font-bold inline-flex items-center justify-center text-black"
         @click="handleSearch"
       >
         Search

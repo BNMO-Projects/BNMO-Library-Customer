@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { router } from "@/router/router";
 import { useAuthStore } from "@/store/auth.store";
 
 const routes = [
@@ -14,6 +15,19 @@ const routes = [
 ];
 
 const authStore = useAuthStore();
+
+const enableActiveRoute = (name: string) => {
+  if (router.currentRoute.value.name === name) {
+    return "bg-orange-coral";
+  } else if (
+    name === "Search" &&
+    router.currentRoute.value.name === "Book Detail"
+  ) {
+    return "bg-orange-coral";
+  }
+
+  return undefined;
+};
 </script>
 
 <template>
@@ -28,7 +42,7 @@ const authStore = useAuthStore();
           :key="route.name"
           :to="{ name: route.path, query: route.query }"
           class="hover:bg-orange-coral p-2 rounded-lg"
-          :class="$route.name === route.name ? 'bg-orange-coral' : undefined"
+          :class="enableActiveRoute(route.name)"
         >
           <div class="flex items-center gap-3">
             <img :src="route.icon" :alt="route.name" class="w-5" />
