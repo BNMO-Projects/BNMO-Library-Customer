@@ -28,6 +28,7 @@ export const useAuthStore = defineStore("auth", {
   getters: {
     isLoadingRegister: (state) => state.loadingRegister,
     errorRegister: (state) => state.errRegister,
+    errorDetailRegister: (state) => state.errDetailRegister,
 
     getUsername: (state) => state.username,
     getRefreshToken: (state) => state.refreshToken,
@@ -121,5 +122,6 @@ export const useAuthStore = defineStore("auth", {
         }
       }
     }
-  }
+  },
+  persist: true
 });

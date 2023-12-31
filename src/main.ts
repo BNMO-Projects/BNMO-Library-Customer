@@ -14,6 +14,7 @@ import PiniaPluginPersistedState from "pinia-plugin-persistedstate";
 import { useAuthStore } from "./store/auth.store";
 
 const pinia = createPinia();
+pinia.use(PiniaPluginPersistedState);
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_APP_URL;
 
