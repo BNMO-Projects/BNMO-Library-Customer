@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import TopHeader from "@/components/TopHeader.vue";
-import LoggedLayout from "@/components/LoggedLayout.vue";
+import TopHeader from "@/components/global/TopHeader.vue";
+import LoggedLayout from "@/components/global/LoggedLayout.vue";
 import { router } from "@/router/router";
 import { useBookStore } from "@/store/book.store";
 import { storeToRefs } from "pinia";

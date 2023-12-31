@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import TopHeader from "@/components/TopHeader.vue";
+import TopHeader from "@/components/global/TopHeader.vue";
 import SearchBar from "@/components/search/SearchBar.vue";
-import LoggedLayout from "@/components/LoggedLayout.vue";
+import LoggedLayout from "@/components/global/LoggedLayout.vue";
 import { useBookStore } from "@/store/book.store";
 import { storeToRefs } from "pinia";
 import BookCard from "@/components/search/BookCard.vue";

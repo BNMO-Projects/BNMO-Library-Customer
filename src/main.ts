@@ -4,11 +4,7 @@ import "@/index.css";
 import "vue-toastification/dist/index.css";
 import { createPinia } from "pinia";
 import { router } from "@/router/router";
-import axios, {
-  AxiosError,
-  AxiosRequestConfig,
-  InternalAxiosRequestConfig
-} from "axios";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import Toast, { PluginOptions } from "vue-toastification";
 import PiniaPluginPersistedState from "pinia-plugin-persistedstate";
 import { useAuthStore } from "./store/auth.store";

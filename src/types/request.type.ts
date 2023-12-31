@@ -1,5 +1,3 @@
-import { CatalogMetadataResponse } from "@/types/response.type";
-
 export type LoginRequest = {
   username: string;
   password: string;
