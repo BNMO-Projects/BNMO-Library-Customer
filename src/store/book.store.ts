@@ -1,5 +1,9 @@
 import { CatalogSearchQuery } from "@/types/request.type";
-import { PageMetadata, CatalogMetadataResponse } from "@/types/response.type";
+import {
+  PageMetadata,
+  CatalogMetadataResponse,
+  BookListResponse
+} from "@/types/response.type";
 import axios, { AxiosError } from "axios";
 import { defineStore } from "pinia";
 import { useToast } from "vue-toastification";
@@ -9,7 +13,7 @@ const toast = useToast();
 export const useBookStore = defineStore("book", {
   state: () => {
     return {
-      books: [],
+      books: [] as Array<BookListResponse>,
       booksMetadata: {} as PageMetadata,
       loadingBooks: false,
       errBooks: "" || undefined,
