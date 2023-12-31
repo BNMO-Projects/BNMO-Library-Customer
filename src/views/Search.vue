@@ -70,7 +70,7 @@ watch(page, () => {
       <div v-if="isLoadingBooks" class="flex justify-center gap-4">
         <FwbSpinner size="12" />
       </div>
-      <div v-else class="flex flex-col gap-4">
+      <div v-else class="flex flex-col gap-4 justify-center">
         <h2>Search result</h2>
         <div
           :class="`lg:grid-cols-5 lg:grid-rows-${rowsLg(
