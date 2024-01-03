@@ -23,7 +23,7 @@ const { getUsername } = storeToRefs(authStore);
     <div class="flex items-center gap-4">
       <p
         class="font-bold"
-        :class="$route.name === 'Book Detail' ? 'hidden' : 'block'"
+        :class="$route.name === 'Book Detail' ? 'hidden lg:block' : 'block'"
       >
         {{
           new Date().toLocaleString("en-GB", {

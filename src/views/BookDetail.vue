@@ -7,9 +7,11 @@ import { useBookStore } from "@/store/book.store";
 import { storeToRefs } from "pinia";
 import { FwbSpinner } from "flowbite-vue";
 import { useCartStore } from "@/store/cart.store";
+import { useWishlistStore } from "@/store/wishlist.store";
 
 const bookStore = useBookStore();
 const cartStore = useCartStore();
+const wishlistStore = useWishlistStore();
 
 const { getBookDetail, isLoadingBookDetail } = storeToRefs(bookStore);
 
@@ -19,6 +21,10 @@ onMounted(() => {
 
 const handleAddToCart = (id: string) => {
   cartStore.addItemToCart(id);
+};
+
+const handleAddToWishlist = (id: string) => {
+  wishlistStore.addNewWishlist(id);
 };
 </script>
 
@@ -54,6 +60,7 @@ const handleAddToCart = (id: string) => {
             >
               <button
                 class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
+                @click="handleAddToWishlist(getBookDetail.id)"
               >
                 <img
                   src="/icons/heart_solid.svg"
