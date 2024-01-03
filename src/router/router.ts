@@ -7,6 +7,7 @@ const Register = () => import("@/views/Register.vue");
 // Authenticated views
 const Search = () => import("@/views/Search.vue");
 const BookDetail = () => import("@/views/BookDetail.vue");
+const MyLibrary = () => import("@/views/MyLibrary.vue");
 const Cart = () => import("@/views/Cart.vue");
 
 const routes: RouteRecordRaw[] = [
@@ -14,7 +15,7 @@ const routes: RouteRecordRaw[] = [
   { path: "/register", name: "Register", component: Register },
   { path: "/home", name: "Home", component: Search },
   { path: "/search", name: "Search", component: Search },
-  { path: "/my-library", name: "My Library", component: Search },
+  { path: "/my-library/:tab", name: "My Library", component: MyLibrary },
   { path: "/cart", name: "Cart", component: Cart },
   { path: "/settings", name: "Settings", component: Search },
   { path: "/book-detail/:id", name: "Book Detail", component: BookDetail }
