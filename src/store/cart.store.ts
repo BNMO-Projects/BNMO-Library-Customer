@@ -9,6 +9,7 @@ export const useCartStore = defineStore("cart", {
   state: () => {
     return {
       cartItems: [] as Array<CartItemListResponse>,
+      subtotal: 0,
       loadingCartItems: false,
       loadingAddCartItem: false,
       loadingDeleteCartItem: false,
@@ -17,6 +18,7 @@ export const useCartStore = defineStore("cart", {
   },
   getters: {
     getCartItems: (state) => state.cartItems,
+    getSubtotal: (state) => state.subtotal,
     isLoadingCartItems: (state) => state.loadingCartItems,
     isLoadingAddCartItem: (state) => state.loadingAddCartItem,
     isLoadingDeleteCartItem: (state) => state.loadingDeleteCartItem,
@@ -29,6 +31,7 @@ export const useCartStore = defineStore("cart", {
         const response = await axios.get("/cart/cart-item");
 
         this.cartItems = response.data.data;
+        this.subtotal = response.data.subtotal;
         this.loadingCartItems = false;
       } catch (error) {
         if (error instanceof AxiosError) {
@@ -62,6 +65,7 @@ export const useCartStore = defineStore("cart", {
 
         this.loadingDeleteCartItem = false;
         toast.success(response.data.message);
+        this.getAllCartItems();
       } catch (error) {
         if (error instanceof AxiosError) {
           toast.error(error.response?.data.message);

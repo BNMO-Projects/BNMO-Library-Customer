@@ -59,6 +59,7 @@ export type BookDetailResponse = {
 
 export type CartItemListResponse = {
   id: string;
+  book_id: string;
   price: number | null;
   title: string;
   book_cover: string;

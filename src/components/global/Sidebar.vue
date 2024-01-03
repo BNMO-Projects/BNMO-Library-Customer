@@ -11,6 +11,7 @@ const routes = [
     query: { page: 1 }
   },
   { name: "My Library", path: "My Library", icon: "/icons/book_solid.svg" },
+  { name: "Cart", path: "Cart", icon: "/icons/cart_solid.svg" },
   { name: "Settings", path: "Settings", icon: "/icons/cog_solid.svg" }
 ];
 
