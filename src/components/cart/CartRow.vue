@@ -16,7 +16,7 @@ const handleRemoveItem = (id: string) => {
 </script>
 
 <template>
-  <div class="flex items-center border-b border-b-black/20 p-4">
+  <div class="lg:flex items-center border-b border-b-black/20 p-4 hidden">
     <div class="flex items-center gap-4 w-[30%]">
       <img :src="items.book_cover" class="w-16" />
       <RouterLink
@@ -55,6 +55,34 @@ const handleRemoveItem = (id: string) => {
           : "-"
       }}
     </p>
+    <img
+      src="/icons/close_outline.svg"
+      alt="Remove item"
+      class="w-3 hover:cursor-pointer"
+      @click="handleRemoveItem(items.id)"
+    />
+  </div>
+  <div class="flex items-center gap-4 lg:hidden">
+    <img :src="items.book_cover" class="w-24" />
+    <div class="flex flex-col w-4/5">
+      <RouterLink
+        :to="'/book-detail/' + items.book_id"
+        class="flex flex-col w-full hover:cursor-pointer hover:underline"
+      >
+        <p class="font-bold">{{ items.title }}</p>
+        <p>{{ items.author_name }}</p>
+      </RouterLink>
+      <p>{{ items.book_type }}</p>
+      <p>
+        {{
+          items.price?.toLocaleString("en-US", {
+            style: "currency",
+            currency: "IDR",
+            currencyDisplay: "narrowSymbol"
+          })
+        }}
+      </p>
+    </div>
     <img
       src="/icons/close_outline.svg"
       alt="Remove item"

@@ -21,8 +21,11 @@ onMounted(() => {
   <LoggedLayout>
     <TopHeader />
     <FwbSpinner size="12" v-if="isLoadingAddCartItem" />
-    <div class="flex flex-col" v-else>
-      <div class="flex w-full text-center font-bold px-4 mb-4">
+    <div class="flex flex-col gap-4 lg:gap-0" v-else>
+      <h2>Shopping Cart</h2>
+      <div
+        class="hidden lg:flex w-full text-center font-bold border-b border-b-black/20 p-4 mb-4"
+      >
         <p class="w-[30%]">Book</p>
         <p class="w-1/5">Type</p>
         <p class="w-[15%]">Price</p>
@@ -30,12 +33,16 @@ onMounted(() => {
         <p class="w-[20%]">Subtotal</p>
       </div>
       <CartRow v-for="items in getCartItems" :key="items.id" :items="items" />
-      <div class="flex items-center justify-between py-4">
+      <div
+        class="flex flex-col-reverse lg:flex-row items-center justify-between py-4"
+      >
         <p>
           * Please note: We <strong>do not</strong> offer delivery. All books
           must be picked up in-store, free of any shipping charges.
         </p>
-        <div class="flex gap-8 items-center">
+        <div
+          class="flex justify-between lg:justify-normal gap-0 lg:gap-8 items-center w-full lg:w-fit"
+        >
           <p class="font-bold">Subtotal</p>
           <h2 class="font-normal">
             {{
@@ -49,7 +56,7 @@ onMounted(() => {
           </h2>
         </div>
       </div>
-      <div class="flex justify-end items-center">
+      <div class="flex justify-end items-center mb-12 lg:mb-0">
         <FwbButton
           class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-1/4 h-fit text-base font-bold inline-flex items-center justify-center text-black"
         >
