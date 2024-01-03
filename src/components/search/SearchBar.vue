@@ -11,10 +11,14 @@ const props = defineProps({
   page: {
     type: Number,
     required: true
+  },
+  limit: {
+    type: Number,
+    required: true
   }
 });
 
-const { page } = toRefs(props);
+const { page, limit } = toRefs(props);
 
 const bookStore = useBookStore();
 const query = ref({} as CatalogSearchQuery);
@@ -34,7 +38,7 @@ onMounted(() => {
   bookStore.getLanguagesList(undefined);
 
   query.value.currentPage = page.value;
-  query.value.limitPerPage = 10;
+  query.value.limitPerPage = limit.value;
   query.value.bookType = "ALL";
   bookStore.getBooksList(query.value);
 });
