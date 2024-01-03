@@ -22,7 +22,7 @@ const handleAddToCart = (id: string) => {
     <img
       :src="wishlist.book_cover"
       :alt="wishlist.id"
-      class="rounded-md w-16 lg:w-24"
+      class="rounded-md w-16 lg:w-24 2xl:w-28 3xl:w-32"
     />
     <div class="flex flex-col w-full gap-2 relative">
       <span
@@ -30,7 +30,7 @@ const handleAddToCart = (id: string) => {
       >
         {{ wishlist.book_type }}
       </span>
-      <h2 class="truncate">{{ wishlist.title }}</h2>
+      <h2 class="truncate w-[60%]">{{ wishlist.title }}</h2>
       <p>{{ wishlist.author_name }}</p>
       <p class="font-bold">
         Stock: {{ wishlist.current_stock }} /

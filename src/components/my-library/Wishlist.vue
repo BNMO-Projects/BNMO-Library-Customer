@@ -37,7 +37,11 @@ onMounted(() => {
 const handleSearch = () => {
   query.value.currentPage = 1;
   if (page.value !== 1) {
-    router.push({ name: "Search", query: { page: 1 } });
+    router.push({
+      name: "My Library",
+      query: { page: 1 },
+      params: { tab: "wishlist" }
+    });
   }
   wishlistStore.getWishlistData(query.value);
 };
@@ -68,7 +72,7 @@ const rowsBase = (total: number, page: number) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4 items-center">
     <div class="flex w-full gap-4">
       <FwbInput
         v-model="query.searchQuery"
@@ -92,7 +96,7 @@ const rowsBase = (total: number, page: number) => {
         Search
       </FwbButton>
     </div>
-    <FwbSpinner v-if="isLoadingWishlist" />
+    <FwbSpinner v-if="isLoadingWishlist" size="12" />
     <div
       class="grid gap-4"
       :class="`grid-cols-1 grid-rows-${rowsBase(

@@ -2,12 +2,11 @@
 import { ref } from "vue";
 import LoggedLayout from "@/components/global/LoggedLayout.vue";
 import TopHeader from "@/components/global/TopHeader.vue";
-import { router } from "@/router/router";
 import Wishlist from "@/components/my-library/Wishlist.vue";
 
 const isLg = ref(window.screen.width > 1023);
 const tabs = [
-  { id: "wishlist", name: "Wishlist", path: "/wishlist" },
+  { id: "wishlist", name: "Wishlist", query: { page: 1 } },
   {
     id: "currently-borrowed",
     name: "Currently Borrowed",
@@ -15,7 +14,6 @@ const tabs = [
   }
 ];
 const activeTab = ref(tabs[0].id);
-console.log(router.currentRoute.value);
 </script>
 
 <template>
@@ -27,7 +25,11 @@ console.log(router.currentRoute.value);
       >
         <li class="me-2" v-for="tab in tabs" :key="tab.id">
           <RouterLink
-            :to="'/my-library' + tab.path"
+            :to="{
+              name: 'My Library',
+              query: tab.query,
+              params: { tab: tab.id }
+            }"
             class="inline-block px-4 py-3 text-black rounded-lg hover:bg-yellow-mustard"
             :class="
               $route.params.tab === tab.id ? 'bg-yellow-mustard' : undefined
