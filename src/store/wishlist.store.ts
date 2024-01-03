@@ -1,15 +1,15 @@
 import { WishlistSearchQuery } from "@/types/request.type";
-import { BookListResponse, PageMetadata } from "@/types/response.type";
+import { PageMetadata, WishlistResponse } from "@/types/response.type";
 import axios, { AxiosError } from "axios";
 import { defineStore } from "pinia";
 import { useToast } from "vue-toastification";
 
 const toast = useToast();
 
-export const useCartStore = defineStore("cart", {
+export const useWishlistStore = defineStore("wishlist", {
   state: () => {
     return {
-      wishlist: [] as Array<BookListResponse>,
+      wishlist: [] as Array<WishlistResponse>,
       wishlistMetadata: {} as PageMetadata,
       loadingWishlist: false,
       loadingAddWishlist: false,

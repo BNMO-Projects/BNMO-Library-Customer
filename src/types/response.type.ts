@@ -66,3 +66,16 @@ export type CartItemListResponse = {
   book_type: string;
   author_name: string;
 };
+
+export type WishlistResponse = {
+  id: string;
+  book_id: string;
+  created_at: Date;
+  title: string;
+  book_cover: string;
+  original_stock: number;
+  current_stock: number;
+  book_type: string;
+  price: number | null;
+  author_name: string;
+};
