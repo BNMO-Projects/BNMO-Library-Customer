@@ -56,3 +56,12 @@ export type BookDetailResponse = {
   genre_name: string;
   language_name: string;
 };
+
+export type CartItemListResponse = {
+  id: string;
+  price: number | null;
+  title: string;
+  book_cover: string;
+  book_type: string;
+  author_name: string;
+};
