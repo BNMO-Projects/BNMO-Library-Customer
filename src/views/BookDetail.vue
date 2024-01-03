@@ -6,14 +6,20 @@ import { router } from "@/router/router";
 import { useBookStore } from "@/store/book.store";
 import { storeToRefs } from "pinia";
 import { FwbSpinner } from "flowbite-vue";
+import { useCartStore } from "@/store/cart.store";
 
 const bookStore = useBookStore();
+const cartStore = useCartStore();
 
 const { getBookDetail, isLoadingBookDetail } = storeToRefs(bookStore);
 
 onMounted(() => {
   bookStore.getBookDetails(router.currentRoute.value.params.id as string);
 });
+
+const handleAddToCart = (id: string) => {
+  cartStore.addItemToCart(id);
+};
 </script>
 
 <template>
@@ -64,7 +70,10 @@ onMounted(() => {
                   alt="Wishlist heart"
                   class="w-5"
                 />
-                <p v-if="getBookDetail.price">
+                <p
+                  v-if="getBookDetail.price"
+                  @click="handleAddToCart(getBookDetail.id)"
+                >
                   Add to cart for
                   {{
                     getBookDetail.price.toLocaleString("en-US", {
@@ -74,7 +83,9 @@ onMounted(() => {
                     })
                   }}
                 </p>
-                <p v-else>Add to cart</p>
+                <p v-else @click="handleAddToCart(getBookDetail.id)">
+                  Add to cart
+                </p>
               </button>
               <p class="font-bold">
                 Stock: {{ getBookDetail.current_stock }} /
