@@ -12,6 +12,7 @@ import { router } from "@/router/router";
 const bookStore = useBookStore();
 const page = ref(1);
 const isLg = ref(window.screen.width > 1023);
+const isThreeXl = ref(window.screen.width > 1919);
 
 const { getBooks, getBooksMetadata, isLoadingBooks } = storeToRefs(bookStore);
 
@@ -21,6 +22,15 @@ onMounted(() => {
     page.value = parseInt(pageQuery as string);
   }
 });
+
+const rowsThreeXl = (total: number, page: number) => {
+  let rows = 2;
+  if (total - (page - 1) * 12 < 6) {
+    rows = 1;
+  }
+
+  return rows;
+};
 
 const rowsLg = (total: number, page: number) => {
   let rows = 2;
@@ -63,17 +73,23 @@ watch(page, () => {
 </script>
 
 <template>
-  <LoggedLayout @resize="(value) => (isLg = value)">
+  <LoggedLayout
+    @resize-lg="(value) => (isLg = value)"
+    @resize-three-xl="(value) => (isThreeXl = value)"
+  >
     <TopHeader />
     <div class="flex flex-col gap-4">
-      <SearchBar :page="page" />
+      <SearchBar :page="page" :limit="isThreeXl ? 12 : 10" />
       <div v-if="isLoadingBooks" class="flex justify-center gap-4">
         <FwbSpinner size="12" />
       </div>
       <div v-else class="flex flex-col gap-4 justify-center">
         <h2>Search result</h2>
         <div
-          :class="`lg:grid-cols-5 lg:grid-rows-${rowsLg(
+          :class="`3xl:grid-cols-6 3xl:grid-rows-${rowsThreeXl(
+            getBooksMetadata.total,
+            page
+          )} lg:grid-cols-5 lg:grid-rows-${rowsLg(
             getBooksMetadata.total,
             page
           )} md:grid-cols-4 md:grid-rows-${rowsMd(

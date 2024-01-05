@@ -6,14 +6,38 @@ import { router } from "@/router/router";
 import { useBookStore } from "@/store/book.store";
 import { storeToRefs } from "pinia";
 import { FwbSpinner } from "flowbite-vue";
+import { useCartStore } from "@/store/cart.store";
+import { useWishlistStore } from "@/store/wishlist.store";
 
 const bookStore = useBookStore();
+const cartStore = useCartStore();
+const wishlistStore = useWishlistStore();
 
 const { getBookDetail, isLoadingBookDetail } = storeToRefs(bookStore);
 
 onMounted(() => {
   bookStore.getBookDetails(router.currentRoute.value.params.id as string);
 });
+
+const handleAddToCart = (id: string) => {
+  cartStore.addItemToCart(id);
+  bookStore.getBookDetails(getBookDetail.value.id);
+};
+
+const handleRemoveFromCart = (id: string) => {
+  cartStore.removeItemFromCart(id);
+  bookStore.getBookDetails(getBookDetail.value.id);
+};
+
+const handleAddToWishlist = (id: string) => {
+  wishlistStore.addNewWishlist(id);
+  bookStore.getBookDetails(getBookDetail.value.id);
+};
+
+const handleRemoveFromWishlist = (id: string) => {
+  wishlistStore.removeFromWishlist(id);
+  bookStore.getBookDetails(getBookDetail.value.id);
+};
 </script>
 
 <template>
@@ -47,7 +71,9 @@ onMounted(() => {
               class="flex flex-col lg:flex-row gap-4 border-t border-t-black pt-4 items-center"
             >
               <button
+                v-if="!getBookDetail.in_wishlist"
                 class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
+                @click="handleAddToWishlist(getBookDetail.id)"
               >
                 <img
                   src="/icons/heart_solid.svg"
@@ -57,6 +83,19 @@ onMounted(() => {
                 Add to wishlist
               </button>
               <button
+                v-else
+                class="bg-orange-coral hover:bg-yellow-mustard transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
+                @click="handleRemoveFromWishlist(getBookDetail.wishlist_id)"
+              >
+                <img
+                  src="/icons/heart_solid.svg"
+                  alt="Wishlist heart"
+                  class="w-4"
+                />
+                Remove from wishlist
+              </button>
+              <button
+                v-if="!getBookDetail.in_cart"
                 class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
               >
                 <img
@@ -64,7 +103,10 @@ onMounted(() => {
                   alt="Wishlist heart"
                   class="w-5"
                 />
-                <p v-if="getBookDetail.price">
+                <p
+                  v-if="getBookDetail.price"
+                  @click="handleAddToCart(getBookDetail.id)"
+                >
                   Add to cart for
                   {{
                     getBookDetail.price.toLocaleString("en-US", {
@@ -74,7 +116,22 @@ onMounted(() => {
                     })
                   }}
                 </p>
-                <p v-else>Add to cart</p>
+                <p v-else @click="handleAddToCart(getBookDetail.id)">
+                  Add to cart
+                </p>
+              </button>
+              <button
+                v-else
+                class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
+              >
+                <img
+                  src="/icons/cart_plus_solid.svg"
+                  alt="Wishlist heart"
+                  class="w-5"
+                />
+                <p @click="handleRemoveFromCart(getBookDetail.cart_item_id)">
+                  Remove from cart
+                </p>
               </button>
               <p class="font-bold">
                 Stock: {{ getBookDetail.current_stock }} /

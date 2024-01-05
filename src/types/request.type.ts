@@ -22,3 +22,10 @@ export type CatalogSearchQuery = {
   genre: string | undefined;
   language: string | undefined;
 };
+
+export type WishlistSearchQuery = {
+  currentPage: number;
+  limitPerPage: number;
+  bookType: string;
+  searchQuery: string | undefined;
+};

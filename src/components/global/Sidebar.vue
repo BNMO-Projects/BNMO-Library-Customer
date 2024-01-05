@@ -10,7 +10,14 @@ const routes = [
     icon: "/icons/search_loop_outline.svg",
     query: { page: 1 }
   },
-  { name: "My Library", path: "My Library", icon: "/icons/book_solid.svg" },
+  {
+    name: "My Library",
+    path: "My Library",
+    icon: "/icons/book_solid.svg",
+    query: { page: 1 },
+    params: { tab: "wishlist" }
+  },
+  { name: "Cart", path: "Cart", icon: "/icons/cart_solid.svg" },
   { name: "Settings", path: "Settings", icon: "/icons/cog_solid.svg" }
 ];
 
@@ -40,7 +47,7 @@ const enableActiveRoute = (name: string) => {
         <RouterLink
           v-for="route in routes"
           :key="route.name"
-          :to="{ name: route.path, query: route.query }"
+          :to="{ name: route.path, query: route.query, params: route.params }"
           class="hover:bg-orange-coral p-2 rounded-lg"
           :class="enableActiveRoute(route.name)"
         >

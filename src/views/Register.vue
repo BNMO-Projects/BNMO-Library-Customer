@@ -5,7 +5,6 @@ import { RegisterRequest } from "@/types/request.type";
 import { RegisterErrorDetails } from "@/types/response.type";
 import { useAuthStore } from "@/store/auth.store";
 import { storeToRefs } from "pinia";
-import { ErrorTypes } from "vue-router";
 
 const authStore = useAuthStore();
 const form = ref({} as RegisterRequest);

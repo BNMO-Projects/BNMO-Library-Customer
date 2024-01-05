@@ -9,7 +9,13 @@ const routes = [
     icon: "/icons/search_loop_outline.svg",
     query: { page: 1 }
   },
-  { name: "My Library", path: "My Library", icon: "/icons/book_solid.svg" },
+  {
+    name: "My Library",
+    path: "My Library",
+    icon: "/icons/book_solid.svg",
+    query: { page: 1 },
+    params: { tab: "wishlist" }
+  },
   { name: "Settings", path: "Settings", icon: "/icons/cog_solid.svg" }
 ];
 
@@ -22,7 +28,7 @@ const authStore = useAuthStore();
       <RouterLink
         v-for="route in routes"
         :key="route.name"
-        :to="{ name: route.path, query: route.query }"
+        :to="{ name: route.path, query: route.query, params: route.params }"
       >
         <li>
           <img :src="route.icon" :alt="route.name" class="w-5" />
