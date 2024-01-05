@@ -1,6 +1,18 @@
-export type ErrorRegisterResponse = {
-  email: Array<string>;
-  username: Array<string>;
+import { Component } from "vue";
+
+export type ToastComponentConfig = {
+  component: Component;
+  props: {
+    heading: string;
+    description: string | undefined;
+  };
+};
+
+export type RegisterErrorDetails = {
+  email: string | undefined;
+  username: string | undefined;
+  password: string | undefined;
+  password_confirmation: string | undefined;
 };
 
 export type PageMetadata = {
