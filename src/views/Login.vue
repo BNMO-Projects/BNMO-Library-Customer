@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { FwbInput, FwbButton } from "flowbite-vue";
+import { FwbInput, FwbSpinner } from "flowbite-vue";
 import { LoginRequest } from "@/types/request.type";
 import { useAuthStore } from "@/store/auth.store";
 import { storeToRefs } from "pinia";
@@ -18,7 +18,7 @@ const handleLogin = () => {
 <template>
   <main class="flex min-h-screen">
     <section
-      class="w-1/2 bg-yellow-mustard hidden lg:flex flex-col items-center justify-center gap-4"
+      class="w-1/2 bg-secondary-color text-white hidden lg:flex flex-col items-center justify-center gap-4"
     >
       <img src="/images/login-art.webp" alt="Login art" class="w-96" />
 
@@ -33,7 +33,7 @@ const handleLogin = () => {
       </div>
     </section>
     <section
-      class="w-full lg:w-1/2 bg-sky-blue flex items-center justify-center"
+      class="w-full lg:w-1/2 bg-main-color flex items-center justify-center"
     >
       <img
         src="/images/logo.webp"
@@ -59,7 +59,7 @@ const handleLogin = () => {
             type="text"
             required
           >
-            <template #prefix class="bg-yellow-mustard">
+            <template #prefix>
               <img src="/icons/user_solid.svg" class="w-4" />
             </template>
           </FwbInput>
@@ -78,13 +78,10 @@ const handleLogin = () => {
         </div>
 
         <div class="flex flex-col w-full items-center gap-4">
-          <FwbButton
-            type="submit"
-            :loading="isLoadingLogin"
-            class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full text-base font-bold inline-flex items-center justify-center text-black"
-          >
+          <button type="submit" class="button-full">
+            <FwbSpinner v-if="isLoadingLogin" />
             Login
-          </FwbButton>
+          </button>
           <p>
             Don't have an account?
             <RouterLink
@@ -98,4 +95,3 @@ const handleLogin = () => {
     </section>
   </main>
 </template>
-@/types/request.type

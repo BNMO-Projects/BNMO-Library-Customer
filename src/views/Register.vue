@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { FwbButton, FwbInput } from "flowbite-vue";
+import { FwbSpinner, FwbInput } from "flowbite-vue";
 import { RegisterRequest } from "@/types/request.type";
 import { RegisterErrorDetails } from "@/types/response.type";
 import { useAuthStore } from "@/store/auth.store";
@@ -84,7 +84,7 @@ watch(errorRegister, () => {
       </div>
     </section>
     <section
-      class="w-full lg:w-1/2 bg-sky-blue flex flex-col items-center justify-center py-8"
+      class="w-full lg:w-1/2 bg-main-color flex flex-col items-center justify-center py-8"
     >
       <h1 class="text-center">Register Account</h1>
       <form
@@ -191,13 +191,10 @@ watch(errorRegister, () => {
         </div>
 
         <div class="flex flex-col w-full items-center gap-4">
-          <FwbButton
-            type="submit"
-            :loading="isLoadingRegister"
-            class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full text-base font-bold inline-flex items-center justify-center text-black"
-          >
+          <button type="submit" class="button-full">
+            <FwbSpinner v-if="isLoadingRegister" />
             Register
-          </FwbButton>
+          </button>
           <p>
             Already have an account?
             <RouterLink
