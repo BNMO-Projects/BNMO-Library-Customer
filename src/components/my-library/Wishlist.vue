@@ -2,7 +2,7 @@
 import { router } from "@/router/router";
 import { useWishlistStore } from "@/store/wishlist.store";
 import { WishlistSearchQuery } from "@/types/request.type";
-import { FwbInput, FwbButton, FwbSpinner, FwbPagination } from "flowbite-vue";
+import { FwbInput, FwbSpinner, FwbPagination } from "flowbite-vue";
 import { storeToRefs } from "pinia";
 import { onMounted, ref, toRefs, watch } from "vue";
 import WishlistCard from "@/components/my-library/WishlistCard.vue";
@@ -63,7 +63,7 @@ watch(page, () => {
   </div>
   <div
     v-else-if="getWishlist.length === 0"
-    class="flex flex-col flex-1 w-full items-center justify-center gap-8"
+    class="flex flex-col flex-1 w-full items-center justify-center gap-8 text-center"
   >
     <img src="/icons/heart_outline.svg" alt="Empty cart" class="w-32" />
     <h2>Your wishlist is empty right now.</h2>
@@ -86,15 +86,17 @@ watch(page, () => {
           />
         </template>
       </FwbInput>
-      <FwbButton
-        class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-1/5 h-fit text-base font-bold inline-flex items-center justify-center text-black"
+      <button
         @click="handleSearch"
+        class="button-full lg:w-1/5"
+        :disabled="isLoadingWishlist"
       >
+        <FwbSpinner v-if="isLoadingWishlist" />
         Search
-      </FwbButton>
+      </button>
     </div>
 
-    <div class="flex flex-col w-full">
+    <div class="flex flex-col w-full gap-4">
       <WishlistCard
         v-for="item in getWishlist"
         :key="item.id"

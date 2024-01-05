@@ -30,9 +30,11 @@ const activeTab = ref(tabs[0].id);
               query: tab.query,
               params: { tab: tab.id }
             }"
-            class="inline-block px-4 py-3 text-black rounded-lg hover:bg-yellow-mustard"
+            class="inline-block px-4 py-3 rounded-lg hover:bg-secondary-color hover:text-white"
             :class="
-              $route.params.tab === tab.id ? 'bg-yellow-mustard' : undefined
+              $route.params.tab === tab.id
+                ? 'bg-secondary-color text-white'
+                : 'text-black'
             "
           >
             {{ tab.name }}
