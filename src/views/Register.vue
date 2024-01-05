@@ -1,18 +1,65 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { FwbButton, FwbInput } from "flowbite-vue";
 import { RegisterRequest } from "@/types/request.type";
+import { RegisterErrorDetails } from "@/types/response.type";
 import { useAuthStore } from "@/store/auth.store";
 import { storeToRefs } from "pinia";
+import { ErrorTypes } from "vue-router";
 
 const authStore = useAuthStore();
 const form = ref({} as RegisterRequest);
 
-const { isLoadingRegister, errorDetailRegister } = storeToRefs(authStore);
+const errors = ref({} as RegisterErrorDetails);
+
+const { isLoadingRegister, errorRegister } = storeToRefs(authStore);
 
 const handleRegister = () => {
   authStore.postRegister(form.value);
 };
+
+watch(errorRegister, () => {
+  const emailIdx = errorRegister.value.findIndex((item) =>
+    item.toLowerCase().includes("email")
+  );
+  if (emailIdx !== -1) {
+    errors.value.email = errorRegister.value[emailIdx].toString();
+  } else {
+    errors.value.email = undefined;
+  }
+
+  const usernameIdx = errorRegister.value.findIndex((item) =>
+    item.toLowerCase().includes("username")
+  );
+  if (usernameIdx !== -1) {
+    errors.value.username = errorRegister.value[usernameIdx].toString();
+  } else {
+    errors.value.username = undefined;
+  }
+
+  const passwordIdx = errorRegister.value
+    .reverse()
+    .findIndex(
+      (item) =>
+        item.toLowerCase().includes("password") &&
+        !item.toLowerCase().includes("confirmation")
+    );
+  if (passwordIdx !== -1) {
+    errors.value.password = errorRegister.value[passwordIdx].toString();
+  } else {
+    errors.value.password = undefined;
+  }
+
+  const passwordCofirmationIdx = errorRegister.value.findIndex((item) =>
+    item.toLowerCase().includes("password confirmation")
+  );
+  if (passwordCofirmationIdx !== -1) {
+    errors.value.password_confirmation =
+      errorRegister.value[passwordCofirmationIdx].toString();
+  } else {
+    errors.value.password_confirmation = undefined;
+  }
+});
 </script>
 
 <template>
@@ -46,7 +93,12 @@ const handleRegister = () => {
         @submit.prevent="handleRegister"
       >
         <div
-          class="grid grid-cols-1 grid-rows-6 lg:grid-cols-2 lg:grid-rows-3 gap-x-8 gap-y-4"
+          class="grid grid-cols-1 grid-rows-6 lg:grid-cols-2 lg:grid-rows-3 gap-x-8"
+          :class="
+            Object.values(errors).some((value) => value !== undefined)
+              ? 'gap-y-0'
+              : 'gap-y-4'
+          "
         >
           <FwbInput
             v-model="form.first_name"
@@ -78,18 +130,13 @@ const handleRegister = () => {
             placeholder="Email"
             type="email"
             required
-            :validation-status="
-              errorDetailRegister.hasOwnProperty('email') ? 'error' : undefined
-            "
+            :validation-status="errors.email ? 'error' : undefined"
           >
             <template #prefix>
               <img src="/icons/envelope_solid.svg" class="w-5" />
             </template>
-            <template
-              v-if="errorDetailRegister.hasOwnProperty('email')"
-              #validationMessage
-            >
-              {{ errorDetailRegister.email[0] }}
+            <template v-if="errors.email" #validationMessage>
+              {{ errors.email }}
             </template>
           </FwbInput>
           <FwbInput
@@ -99,20 +146,13 @@ const handleRegister = () => {
             placeholder="Username"
             type="text"
             required
-            :validation-status="
-              errorDetailRegister.hasOwnProperty('username')
-                ? 'error'
-                : undefined
-            "
+            :validation-status="errors.username ? 'error' : undefined"
           >
             <template #prefix>
               <img src="/icons/user_settings_solid.svg" class="w-5" />
             </template>
-            <template
-              v-if="errorDetailRegister.hasOwnProperty('username')"
-              #validationMessage
-            >
-              {{ errorDetailRegister.username[0] }}
+            <template v-if="errors.username" #validationMessage>
+              {{ errors.username }}
             </template>
           </FwbInput>
           <FwbInput
@@ -122,9 +162,13 @@ const handleRegister = () => {
             placeholder="Password"
             type="password"
             required
+            :validation-status="errors.password ? 'error' : undefined"
           >
             <template #prefix>
               <img src="/icons/lock_solid.svg" class="w-4" />
+            </template>
+            <template v-if="errors.password" #validationMessage>
+              {{ errors.password }}
             </template>
           </FwbInput>
           <FwbInput
@@ -134,9 +178,15 @@ const handleRegister = () => {
             placeholder="Confirm password"
             type="password"
             required
+            :validation-status="
+              errors.password_confirmation ? 'error' : undefined
+            "
           >
             <template #prefix>
               <img src="/icons/lock_solid.svg" class="w-4" />
+            </template>
+            <template v-if="errors.password_confirmation" #validationMessage>
+              {{ errors.password_confirmation }}
             </template>
           </FwbInput>
         </div>

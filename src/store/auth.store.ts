@@ -1,6 +1,7 @@
+import ToastComponent from "@/components/global/ToastComponent.vue";
 import { router } from "@/router/router";
 import { LoginRequest, RegisterRequest } from "@/types/request.type";
-import { ErrorRegisterResponse } from "@/types/response.type";
+import { ToastComponentConfig } from "@/types/response.type";
 import axios, { AxiosError } from "axios";
 import { defineStore } from "pinia";
 import { useToast } from "vue-toastification";
@@ -11,13 +12,11 @@ export const useAuthStore = defineStore("auth", {
   state: () => {
     return {
       loadingRegister: false,
-      errRegister: "" || undefined,
-      errDetailRegister: {} as ErrorRegisterResponse,
+      errRegister: [] as Array<String>,
 
       username: "",
       refreshToken: "",
       loadingLogin: false,
-      errLogin: "" || undefined,
 
       loadingLogout: false,
       errLogout: "" || undefined,
@@ -28,12 +27,10 @@ export const useAuthStore = defineStore("auth", {
   getters: {
     isLoadingRegister: (state) => state.loadingRegister,
     errorRegister: (state) => state.errRegister,
-    errorDetailRegister: (state) => state.errDetailRegister,
 
     getUsername: (state) => state.username,
     getRefreshToken: (state) => state.refreshToken,
     isLoadingLogin: (state) => state.loadingLogin,
-    errorLogin: (state) => state.errLogin,
 
     isLoadingLogout: (state) => state.loadingLogout,
     errorLogout: (state) => state.errLogout,
@@ -55,12 +52,11 @@ export const useAuthStore = defineStore("auth", {
         toast.success(response.data.message);
       } catch (error) {
         if (error instanceof AxiosError) {
-          this.errRegister = error.response?.data.message;
-          this.errDetailRegister = error.response?.data.error;
+          this.errRegister = error.response?.data.errors;
 
           this.loadingRegister = false;
 
-          toast.error(this.errRegister);
+          toast.error(error.response?.data.message);
         }
       }
     },
@@ -83,10 +79,17 @@ export const useAuthStore = defineStore("auth", {
         toast.success(response.data.message);
       } catch (error) {
         if (error instanceof AxiosError) {
-          this.errLogin = error.response?.data.message;
           this.loadingLogin = false;
 
-          toast.error(this.errLogin);
+          const config: ToastComponentConfig = {
+            component: ToastComponent,
+            props: {
+              heading: error.response?.data.message,
+              description: error.response?.data.errors[0]
+            }
+          };
+
+          toast.error(config);
         }
       }
     },
