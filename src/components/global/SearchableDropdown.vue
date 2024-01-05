@@ -68,7 +68,7 @@ onClickOutside(dropdown, () => (open.value = false));
       @focus="open = true"
     >
       <div
-        class="flex bg-gray-50 pr-4 rounded-lg items-center focus-within:ring-2 focus-within:ring-blue-500"
+        class="flex bg-gray-50 border border-gray-300 pr-4 rounded-lg items-center focus-within:ring-2 focus-within:ring-blue-500"
         @click="open = !open"
       >
         <FwbInput
@@ -99,7 +99,7 @@ onClickOutside(dropdown, () => (open.value = false));
         <div
           v-for="option in options"
           :key="option.id"
-          class="hover:bg-orange-coral p-2 hover:cursor-pointer text-ellipsis"
+          class="hover:bg-secondary-color hover:text-white p-2 hover:cursor-pointer text-ellipsis"
           @click="handleSelectedValue(option)"
         >
           <p>{{ option[optionLabel] }}</p>

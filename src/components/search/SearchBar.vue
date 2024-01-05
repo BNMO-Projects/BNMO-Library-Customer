@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, toRefs } from "vue";
-import { FwbButton, FwbInput, FwbRadio } from "flowbite-vue";
+import { FwbSpinner, FwbInput, FwbRadio } from "flowbite-vue";
 import { CatalogSearchQuery } from "@/types/request.type";
 import { useBookStore } from "@/store/book.store";
 import { storeToRefs } from "pinia";
@@ -24,6 +24,7 @@ const bookStore = useBookStore();
 const query = ref({} as CatalogSearchQuery);
 
 const {
+  isLoadingBooks,
   getCategories,
   isLoadingCategories,
   getGenres,
@@ -151,12 +152,14 @@ watch(page, () => {
           </li>
         </ul>
       </div>
-      <FwbButton
-        class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-1/5 h-fit text-base font-bold inline-flex items-center justify-center text-black"
+      <button
         @click="handleSearch"
+        class="button-full lg:w-1/5"
+        :disabled="isLoadingBooks"
       >
+        <FwbSpinner v-if="isLoadingBooks" />
         Search
-      </FwbButton>
+      </button>
     </div>
   </div>
 </template>

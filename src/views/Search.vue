@@ -78,9 +78,12 @@ watch(page, () => {
     @resize-three-xl="(value) => (isThreeXl = value)"
   >
     <TopHeader />
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col flex-1 gap-4">
       <SearchBar :page="page" :limit="isThreeXl ? 12 : 10" />
-      <div v-if="isLoadingBooks" class="flex justify-center gap-4">
+      <div
+        v-if="isLoadingBooks"
+        class="flex flex-1 items-center justify-center gap-4"
+      >
         <FwbSpinner size="12" />
       </div>
       <div v-else class="flex flex-col gap-4 justify-center">
