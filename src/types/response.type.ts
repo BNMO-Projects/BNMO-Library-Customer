@@ -55,6 +55,10 @@ export type BookDetailResponse = {
   category_name: string;
   genre_name: string;
   language_name: string;
+  in_wishlist: boolean;
+  wishlist_id: string;
+  in_cart: boolean;
+  cart_item_id: string;
 };
 
 export type CartItemListResponse = {

@@ -21,10 +21,22 @@ onMounted(() => {
 
 const handleAddToCart = (id: string) => {
   cartStore.addItemToCart(id);
+  bookStore.getBookDetails(getBookDetail.value.id);
+};
+
+const handleRemoveFromCart = (id: string) => {
+  cartStore.removeItemFromCart(id);
+  bookStore.getBookDetails(getBookDetail.value.id);
 };
 
 const handleAddToWishlist = (id: string) => {
   wishlistStore.addNewWishlist(id);
+  bookStore.getBookDetails(getBookDetail.value.id);
+};
+
+const handleRemoveFromWishlist = (id: string) => {
+  wishlistStore.removeFromWishlist(id);
+  bookStore.getBookDetails(getBookDetail.value.id);
 };
 </script>
 
@@ -59,6 +71,7 @@ const handleAddToWishlist = (id: string) => {
               class="flex flex-col lg:flex-row gap-4 border-t border-t-black pt-4 items-center"
             >
               <button
+                v-if="!getBookDetail.in_wishlist"
                 class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
                 @click="handleAddToWishlist(getBookDetail.id)"
               >
@@ -70,6 +83,19 @@ const handleAddToWishlist = (id: string) => {
                 Add to wishlist
               </button>
               <button
+                v-else
+                class="bg-orange-coral hover:bg-yellow-mustard transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
+                @click="handleRemoveFromWishlist(getBookDetail.wishlist_id)"
+              >
+                <img
+                  src="/icons/heart_solid.svg"
+                  alt="Wishlist heart"
+                  class="w-4"
+                />
+                Remove from wishlist
+              </button>
+              <button
+                v-if="!getBookDetail.in_cart"
                 class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
               >
                 <img
@@ -92,6 +118,19 @@ const handleAddToWishlist = (id: string) => {
                 </p>
                 <p v-else @click="handleAddToCart(getBookDetail.id)">
                   Add to cart
+                </p>
+              </button>
+              <button
+                v-else
+                class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
+              >
+                <img
+                  src="/icons/cart_plus_solid.svg"
+                  alt="Wishlist heart"
+                  class="w-5"
+                />
+                <p @click="handleRemoveFromCart(getBookDetail.cart_item_id)">
+                  Remove from cart
                 </p>
               </button>
               <p class="font-bold">
