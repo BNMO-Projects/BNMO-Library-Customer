@@ -38,7 +38,7 @@ const emit = defineEmits<{
   <main class="flex flex-col lg:flex-row min-h-screen">
     <Sidebar v-if="isLg" />
     <section
-      class="absolute right-0 bg-sky-blue w-full lg:w-5/6 flex flex-col p-8 gap-4 min-h-screen"
+      class="absolute right-0 bg-main-color w-full lg:w-5/6 flex flex-col p-8 gap-4 min-h-screen"
     >
       <slot></slot>
     </section>
