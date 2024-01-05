@@ -18,34 +18,57 @@ const handleAddToCart = (id: string) => {
 </script>
 
 <template>
-  <div class="hidden lg:flex rounded-md p-4 gap-4 shadow-md">
+  <div class="hidden lg:flex rounded-md p-4 gap-4 shadow-md w-full">
     <img
       :src="wishlist.book_cover"
       :alt="wishlist.id"
-      class="rounded-md w-16 lg:w-24 2xl:w-28 3xl:w-32"
+      class="rounded-md w-16 lg:w-24 2xl:w-32 3xl:w-36"
     />
-    <div class="flex flex-col w-full gap-2 relative">
-      <span
-        class="absolute bg-orange-coral px-4 py-2 rounded-lg font-bold right-0 top-0"
-      >
-        {{ wishlist.book_type }}
-      </span>
-      <h2 class="truncate w-[60%]">{{ wishlist.title }}</h2>
-      <p>{{ wishlist.author_name }}</p>
-      <p class="font-bold">
-        Stock: {{ wishlist.current_stock }} /
-        {{ wishlist.original_stock }}
-      </p>
-      <p class="hidden lg:block">
-        Wishlist added on
-        {{
-          new Date(wishlist.created_at).toLocaleDateString("en-GB", {
-            day: "numeric",
-            month: "long",
-            year: "numeric"
-          })
-        }}
-      </p>
+    <div class="flex flex-col w-full gap-2">
+      <div class="flex justify-between">
+        <div class="flex gap-4 items-center">
+          <h3 class="truncate">{{ wishlist.title }}</h3>
+          <p>{{ wishlist.author_name }}</p>
+        </div>
+        <div class="flex gap-4 items-center">
+          <p class="hidden lg:block">
+            Wishlist added on
+            {{
+              new Date(wishlist.created_at).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+              })
+            }}
+          </p>
+          <span
+            class="bg-orange-coral px-4 py-2 rounded-lg font-bold right-0 top-0"
+          >
+            {{ wishlist.book_type }}
+          </span>
+        </div>
+      </div>
+      <div class="flex justify-between">
+        <div class="flex gap-4 items-center">
+          <span class="bg-orange-coral text-sm px-2 rounded-md">
+            {{ wishlist.category_name }}
+          </span>
+
+          <span class="bg-orange-coral text-sm px-2 rounded-md">
+            {{ wishlist.genre_name }}
+          </span>
+
+          <span class="bg-orange-coral text-sm px-2 rounded-md">
+            {{ wishlist.language_name }}
+          </span>
+        </div>
+        <p class="font-bold">
+          Stock: {{ wishlist.current_stock }} /
+          {{ wishlist.original_stock }}
+        </p>
+      </div>
+      <p class="line-clamp-3">{{ wishlist.description }}</p>
+
       <div class="flex flex-col lg:flex-row gap-4">
         <RouterLink :to="'/book-detail/' + wishlist.book_id">
           <FwbButton

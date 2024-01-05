@@ -28,7 +28,7 @@ export const useCartStore = defineStore("cart", {
     async getAllCartItems() {
       this.loadingCartItems = true;
       try {
-        const response = await axios.get("/cart/cart-item");
+        const response = await axios.get("/cart");
 
         this.cartItems = response.data.data;
         this.subtotal = response.data.subtotal;

@@ -72,10 +72,15 @@ export type WishlistResponse = {
   book_id: string;
   created_at: Date;
   title: string;
+  publication_year: Date;
   book_cover: string;
   original_stock: number;
   current_stock: number;
   book_type: string;
   price: number | null;
+  description: string | null;
   author_name: string;
+  category_name: string;
+  genre_name: string;
+  language_name: string;
 };

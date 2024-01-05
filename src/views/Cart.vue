@@ -21,6 +21,14 @@ onMounted(() => {
   <LoggedLayout>
     <TopHeader />
     <FwbSpinner size="12" v-if="isLoadingAddCartItem" />
+    <div
+      v-else-if="getCartItems.length === 0"
+      class="flex flex-col flex-1 w-full items-center justify-center gap-8"
+    >
+      <img src="/icons/cart_outline.svg" alt="Empty cart" class="w-32" />
+      <h2>Your shopping cart is currently empty.</h2>
+      <p>Browse our collection to find something you'll love!</p>
+    </div>
     <div class="flex flex-col gap-4 lg:gap-0" v-else>
       <h2>Shopping Cart</h2>
       <div

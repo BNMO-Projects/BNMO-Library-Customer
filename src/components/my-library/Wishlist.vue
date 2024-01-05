@@ -4,7 +4,7 @@ import { useWishlistStore } from "@/store/wishlist.store";
 import { WishlistSearchQuery } from "@/types/request.type";
 import { FwbInput, FwbButton, FwbSpinner, FwbPagination } from "flowbite-vue";
 import { storeToRefs } from "pinia";
-import { onMounted, ref, toRefs } from "vue";
+import { onMounted, ref, toRefs, watch } from "vue";
 import WishlistCard from "@/components/my-library/WishlistCard.vue";
 
 const props = defineProps({
@@ -29,7 +29,7 @@ onMounted(() => {
   }
 
   query.value.currentPage = page.value;
-  query.value.limitPerPage = 10;
+  query.value.limitPerPage = 5;
   query.value.bookType = "ALL";
   wishlistStore.getWishlistData(query.value);
 });
@@ -46,34 +46,31 @@ const handleSearch = () => {
   wishlistStore.getWishlistData(query.value);
 };
 
-const rowsLg = (total: number, page: number) => {
-  let rows = 2;
-  if (total - (page - 1) * 10 < 5) {
-    rows = 1;
-  }
-
-  return rows;
-};
-
-const rowsBase = (total: number, page: number) => {
-  let rows = 5;
-  if (total - (page - 1) * 10 < 8) {
-    rows = 4;
-  } else if (total - (page - 1) * 10 < 6) {
-    rows = 3;
-  } else if (total - (page - 1) * 10 < 4) {
-    rows = 2;
-  } else if (total - (page - 1) * 10 < 2) {
-    rows = 1;
-  }
-
-  return rows;
-};
+watch(page, () => {
+  router.push({
+    name: "My Library",
+    query: { page: page.value },
+    params: { tab: "wishlist" }
+  });
+  query.value.currentPage = page.value;
+  wishlistStore.getWishlistData(query.value);
+});
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 items-center">
-    <div class="flex w-full gap-4">
+  <div v-if="isLoadingWishlist" class="flex flex-1 items-center justify-center">
+    <FwbSpinner size="12" />
+  </div>
+  <div
+    v-else-if="getWishlist.length === 0"
+    class="flex flex-col flex-1 w-full items-center justify-center gap-8"
+  >
+    <img src="/icons/heart_outline.svg" alt="Empty cart" class="w-32" />
+    <h2>Your wishlist is empty right now.</h2>
+    <p>Start adding your favorite items to it and keep them saved for later!</p>
+  </div>
+  <div v-else class="flex flex-col gap-4 items-center">
+    <div class="flex flex-col lg:flex-row w-full gap-4">
       <FwbInput
         v-model="query.searchQuery"
         id="search_query"
@@ -96,17 +93,8 @@ const rowsBase = (total: number, page: number) => {
         Search
       </FwbButton>
     </div>
-    <FwbSpinner v-if="isLoadingWishlist" size="12" />
-    <div
-      class="grid gap-4"
-      :class="`grid-cols-1 grid-rows-${rowsBase(
-        getWishlistMetadata.total,
-        page
-      )} lg:grid-cols-2 lg:grid-rows-${rowsLg(
-        getWishlistMetadata.total,
-        page
-      )}`"
-    >
+
+    <div class="flex flex-col w-full">
       <WishlistCard
         v-for="item in getWishlist"
         :key="item.id"
