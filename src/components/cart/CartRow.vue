@@ -28,7 +28,7 @@ const handleRemoveItem = (id: string) => {
       </RouterLink>
     </div>
     <div class="w-1/5 text-center">
-      <span class="bg-orange-coral px-4 py-2 rounded-lg font-bold">
+      <span class="book-type-tag">
         {{ items.book_type }}
       </span>
     </div>

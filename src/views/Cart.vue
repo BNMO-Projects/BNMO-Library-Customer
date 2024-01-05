@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FwbButton, FwbSpinner } from "flowbite-vue";
+import { FwbSpinner } from "flowbite-vue";
 import CartRow from "@/components/cart/CartRow.vue";
 import LoggedLayout from "@/components/global/LoggedLayout.vue";
 import TopHeader from "@/components/global/TopHeader.vue";
@@ -23,7 +23,7 @@ onMounted(() => {
     <FwbSpinner size="12" v-if="isLoadingAddCartItem" />
     <div
       v-else-if="getCartItems.length === 0"
-      class="flex flex-col flex-1 w-full items-center justify-center gap-8"
+      class="flex flex-col flex-1 w-full items-center justify-center gap-8 text-center"
     >
       <img src="/icons/cart_outline.svg" alt="Empty cart" class="w-32" />
       <h2>Your shopping cart is currently empty.</h2>
@@ -65,11 +65,10 @@ onMounted(() => {
         </div>
       </div>
       <div class="flex justify-end items-center mb-12 lg:mb-0">
-        <FwbButton
-          class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-1/4 h-fit text-base font-bold inline-flex items-center justify-center text-black"
-        >
+        <button type="submit" class="button-full lg:w-1/4">
+          <FwbSpinner v-if="false" />
           Checkout
-        </FwbButton>
+        </button>
       </div>
     </div>
   </LoggedLayout>
