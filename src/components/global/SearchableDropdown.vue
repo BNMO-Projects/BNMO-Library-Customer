@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, toRefs } from "vue";
-import { FwbInput, FwbSpinner } from "flowbite-vue";
 import debounce from "debounce";
 import { onClickOutside } from "@vueuse/core";
+
+import { FwbInput, FwbSpinner } from "flowbite-vue";
 import AngleDownOutline from "@/components/icons/AngleDownOutline.vue";
 import CloseOutline from "@/components/icons/CloseOutline.vue";
 

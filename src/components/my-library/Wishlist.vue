@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { onMounted, ref, toRefs, watch } from "vue";
 import { router } from "@/router/router";
+
+import { storeToRefs } from "pinia";
 import { useWishlistStore } from "@/store/wishlist.store";
 import { WishlistSearchQuery } from "@/types/request.type";
+
 import { FwbInput, FwbSpinner, FwbPagination, FwbSelect } from "flowbite-vue";
-import { storeToRefs } from "pinia";
-import { onMounted, ref, toRefs, watch } from "vue";
 import WishlistCard from "@/components/my-library/WishlistCard.vue";
 import SearchLoopOutline from "@/components/icons/SearchLoopOutline.vue";
 import HeartOutline from "@/components/icons/HeartOutline.vue";

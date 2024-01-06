@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Sidebar from "@/components/global/Sidebar.vue";
 import { onUnmounted, ref } from "vue";
+import Sidebar from "@/components/global/Sidebar.vue";
 import BottomNavbar from "@/components/global/BottomNavbar.vue";
 
 const isLg = ref(window.screen.width > 1023);

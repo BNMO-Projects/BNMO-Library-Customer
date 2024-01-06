@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { FwbAvatar } from "flowbite-vue";
-import { useAuthStore } from "@/store/auth.store";
 import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/auth.store";
+
+import { FwbAvatar } from "flowbite-vue";
 import ArrowLeft from "@/components/icons/ArrowLeft.vue";
 import UserCircleSolid from "@/components/icons/UserCircleSolid.vue";
 

@@ -1,13 +1,27 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, toRefs } from "vue";
-import { FwbSpinner, FwbInput, FwbSelect } from "flowbite-vue";
-import { CatalogSearchQuery } from "@/types/request.type";
-import { useBookStore } from "@/store/book.store";
-import { storeToRefs } from "pinia";
-import SearchableDropdown from "../global/SearchableDropdown.vue";
 import { router } from "@/router/router";
+
+import { storeToRefs } from "pinia";
+import { useBookStore } from "@/store/book.store";
+import { CatalogSearchQuery } from "@/types/request.type";
+
+import { FwbSpinner, FwbInput, FwbSelect } from "flowbite-vue";
+import SearchableDropdown from "@/components/global/SearchableDropdown.vue";
 import SearchLoopOutline from "@/components/icons/SearchLoopOutline.vue";
 import UserSolid from "@/components/icons/UserSolid.vue";
+
+const bookStore = useBookStore();
+
+const {
+  isLoadingBooks,
+  getCategories,
+  isLoadingCategories,
+  getGenres,
+  isLoadingGenres,
+  getLanguages,
+  isLoadingLanguages
+} = storeToRefs(bookStore);
 
 const bookTypeOptions = [
   { name: "ALL", value: "ALL" },
@@ -28,18 +42,7 @@ const props = defineProps({
 
 const { page, limit } = toRefs(props);
 
-const bookStore = useBookStore();
 const query = ref({} as CatalogSearchQuery);
-
-const {
-  isLoadingBooks,
-  getCategories,
-  isLoadingCategories,
-  getGenres,
-  isLoadingGenres,
-  getLanguages,
-  isLoadingLanguages
-} = storeToRefs(bookStore);
 
 onMounted(() => {
   bookStore.getCategoriesList(undefined);
