@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import TopHeader from "@/components/global/TopHeader.vue";
-import SearchBar from "@/components/search/SearchBar.vue";
-import LoggedLayout from "@/components/global/LoggedLayout.vue";
-import { useBookStore } from "@/store/book.store";
-import { storeToRefs } from "pinia";
-import BookCard from "@/components/search/BookCard.vue";
-import { FwbPagination, FwbSpinner } from "flowbite-vue";
 import { router } from "@/router/router";
+
+import { storeToRefs } from "pinia";
+import { useBookStore } from "@/store/book.store";
+
+import { FwbPagination, FwbSpinner } from "flowbite-vue";
+import TopHeader from "@/components/global/TopHeader.vue";
+import LoggedLayout from "@/components/global/LoggedLayout.vue";
+import SearchBar from "@/components/search/SearchBar.vue";
+import BookCard from "@/components/search/BookCard.vue";
 
 const bookStore = useBookStore();
 const page = ref(1);

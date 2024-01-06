@@ -1,19 +1,22 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { FwbInput, FwbSpinner } from "flowbite-vue";
-import { LoginRequest } from "@/types/request.type";
-import { useAuthStore } from "@/store/auth.store";
+
 import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/auth.store";
+import { LoginRequest } from "@/types/request.type";
+
+import { FwbInput, FwbSpinner } from "flowbite-vue";
 import UserSolid from "@/components/icons/UserSolid.vue";
 import LockSolid from "@/components/icons/LockSolid.vue";
 
 const authStore = useAuthStore();
+
+const { isLoadingLogin } = storeToRefs(authStore);
+
 const form = ref({} as LoginRequest);
 const darkMode = ref(
   window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
 );
-
-const { isLoadingLogin } = storeToRefs(authStore);
 
 const handleLogin = () => {
   authStore.postLogin(form.value);

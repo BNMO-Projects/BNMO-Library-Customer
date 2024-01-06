@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { FwbSpinner, FwbInput } from "flowbite-vue";
+
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/auth.store";
 import { RegisterRequest } from "@/types/request.type";
 import { RegisterErrorDetails } from "@/types/response.type";
-import { useAuthStore } from "@/store/auth.store";
-import { storeToRefs } from "pinia";
+
+import { FwbSpinner, FwbInput } from "flowbite-vue";
 import UserSolid from "@/components/icons/UserSolid.vue";
 import UsersSolid from "@/components/icons/UsersSolid.vue";
 import EnvelopeSolid from "@/components/icons/EnvelopeSolid.vue";

@@ -4,7 +4,6 @@ import LoggedLayout from "@/components/global/LoggedLayout.vue";
 import TopHeader from "@/components/global/TopHeader.vue";
 import Wishlist from "@/components/my-library/Wishlist.vue";
 
-const isLg = ref(window.screen.width > 1023);
 const tabs = [
   { id: "wishlist", name: "Wishlist", query: { page: 1 } },
   {
@@ -13,6 +12,8 @@ const tabs = [
     path: "/currently-borrowed"
   }
 ];
+
+const isLg = ref(window.screen.width > 1023);
 const activeTab = ref(tabs[0].id);
 </script>
 

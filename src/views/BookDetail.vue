@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import TopHeader from "@/components/global/TopHeader.vue";
-import LoggedLayout from "@/components/global/LoggedLayout.vue";
 import { router } from "@/router/router";
-import { useBookStore } from "@/store/book.store";
+
 import { storeToRefs } from "pinia";
-import { FwbSpinner } from "flowbite-vue";
+import { useBookStore } from "@/store/book.store";
 import { useCartStore } from "@/store/cart.store";
 import { useWishlistStore } from "@/store/wishlist.store";
+
+import { FwbSpinner } from "flowbite-vue";
+import TopHeader from "@/components/global/TopHeader.vue";
+import LoggedLayout from "@/components/global/LoggedLayout.vue";
 import HeartSolid from "@/components/icons/HeartSolid.vue";
 import CartPlusSolid from "@/components/icons/CartPlusSolid.vue";
 

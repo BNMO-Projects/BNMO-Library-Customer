@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { onMounted } from "vue";
+
+import { storeToRefs } from "pinia";
+import { useCartStore } from "@/store/cart.store";
+
 import { FwbSpinner } from "flowbite-vue";
-import CartRow from "@/components/cart/CartRow.vue";
 import LoggedLayout from "@/components/global/LoggedLayout.vue";
 import TopHeader from "@/components/global/TopHeader.vue";
-import { useCartStore } from "@/store/cart.store";
-import { storeToRefs } from "pinia";
-import { onMounted } from "vue";
+import CartRow from "@/components/cart/CartRow.vue";
 import CartOutline from "@/components/icons/CartOutline.vue";
 
 const cartStore = useCartStore();
