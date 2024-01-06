@@ -26,10 +26,10 @@ body {
   }
 
   .tag-span {
-    @apply bg-tag-color dark:bg-tag-color-dark text-sm px-2 rounded-md text-black;
+    @apply bg-tag-color dark:bg-tag-color-dark text-sm px-2 rounded-md text-black dark:text-white;
   }
 
   .book-type-tag {
-    @apply bg-tag-color dark:bg-tag-color-dark px-4 py-2 rounded-lg font-bold text-black;
+    @apply bg-tag-color dark:bg-tag-color-dark px-4 py-2 rounded-lg font-bold text-black dark:text-white;
   }
 }
