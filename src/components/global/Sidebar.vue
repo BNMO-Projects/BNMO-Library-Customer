@@ -58,7 +58,7 @@ const enableActiveRoute = (name: string) => {
           :class="enableActiveRoute(route.name)"
         >
           <div class="flex items-center gap-3">
-            <component :is="route.icon" color="white" />
+            <component :is="route.icon" custom-class="text-white h-6 w-6" />
             <p class="font-bold">{{ route.name }}</p>
           </div>
         </RouterLink>
@@ -67,7 +67,7 @@ const enableActiveRoute = (name: string) => {
           @click="authStore.postLogout"
         >
           <div class="flex items-center gap-3">
-            <component :is="ArrowRightBracket" color="white" />
+            <component :is="ArrowRightBracket" custom-class="text-white" />
             <p class="font-bold">Logout</p>
           </div>
         </div>

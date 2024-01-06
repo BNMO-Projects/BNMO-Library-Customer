@@ -40,11 +40,11 @@ const authStore = useAuthStore();
         :to="{ name: route.path, query: route.query, params: route.params }"
       >
         <li>
-          <component :is="route.icon" color="white" />
+          <component :is="route.icon" custom-class="text-white w-6 h-6" />
         </li>
       </RouterLink>
       <li @click="authStore.postLogout">
-        <component :is="ArrowRightBracket" color="white" />
+        <component :is="ArrowRightBracket" custom-class="text-white" />
       </li>
     </ul>
   </div>
