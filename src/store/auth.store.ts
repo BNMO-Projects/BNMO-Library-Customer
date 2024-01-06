@@ -1,45 +1,31 @@
-import ToastComponent from "@/components/global/ToastComponent.vue";
+import { defineStore } from "pinia";
+import axios, { AxiosError } from "axios";
 import { router } from "@/router/router";
+
 import { LoginRequest, RegisterRequest } from "@/types/request.type";
 import { ToastComponentConfig } from "@/types/response.type";
-import axios, { AxiosError } from "axios";
-import { defineStore } from "pinia";
+
 import { useToast } from "vue-toastification";
+import ToastComponent from "@/components/global/ToastComponent.vue";
 
 const toast = useToast();
 
 export const useAuthStore = defineStore("auth", {
   state: () => {
     return {
-      loadingRegister: false,
-      errRegister: [] as Array<String>,
+      isLoadingRegister: false,
+      errorRegister: [] as Array<String>,
 
       username: "",
       refreshToken: "",
-      loadingLogin: false,
-
-      loadingLogout: false,
-      errLogout: "" || undefined,
-
-      loadingRefreshToken: false
+      isLoadingLogin: false,
+      isLoadingLogout: false,
+      isLoadingRefreshToken: false
     };
-  },
-  getters: {
-    isLoadingRegister: (state) => state.loadingRegister,
-    errorRegister: (state) => state.errRegister,
-
-    getUsername: (state) => state.username,
-    getRefreshToken: (state) => state.refreshToken,
-    isLoadingLogin: (state) => state.loadingLogin,
-
-    isLoadingLogout: (state) => state.loadingLogout,
-    errorLogout: (state) => state.errLogout,
-
-    isLoadingRefreshToken: (state) => state.loadingRefreshToken
   },
   actions: {
     async postRegister(payload: RegisterRequest) {
-      this.loadingRegister = true;
+      this.isLoadingRegister = true;
 
       try {
         const response = await axios.post("/auth/register", {
@@ -47,21 +33,21 @@ export const useAuthStore = defineStore("auth", {
         });
 
         void router.push({ name: "Login" });
-        this.loadingRegister = false;
+        this.isLoadingRegister = false;
 
         toast.success(response.data.message);
       } catch (error) {
         if (error instanceof AxiosError) {
-          this.errRegister = error.response?.data.errors;
+          this.errorRegister = error.response?.data.errors;
 
-          this.loadingRegister = false;
+          this.isLoadingRegister = false;
 
           toast.error(error.response?.data.message);
         }
       }
     },
     async postLogin(payload: LoginRequest) {
-      this.loadingLogin = true;
+      this.isLoadingLogin = true;
 
       try {
         const response = await axios.post("/auth/login", {
@@ -73,13 +59,13 @@ export const useAuthStore = defineStore("auth", {
 
         this.username = response.data.username;
         this.refreshToken = response.data.refresh_token;
-        this.loadingLogin = false;
+        this.isLoadingLogin = false;
 
         void router.push({ name: "Home" });
         toast.success(response.data.message);
       } catch (error) {
         if (error instanceof AxiosError) {
-          this.loadingLogin = false;
+          this.isLoadingLogin = false;
 
           const config: ToastComponentConfig = {
             component: ToastComponent,
@@ -94,7 +80,7 @@ export const useAuthStore = defineStore("auth", {
       }
     },
     async postLogout() {
-      this.loadingLogout = true;
+      this.isLoadingLogout = true;
 
       localStorage.clear();
       delete axios.defaults.headers.common.Authorization;
@@ -102,10 +88,10 @@ export const useAuthStore = defineStore("auth", {
       void router.push({ name: "Login" });
       toast.success("Logout successful");
 
-      this.loadingLogout = false;
+      this.isLoadingLogout = false;
     },
     async refreshAccessToken() {
-      this.loadingRefreshToken = true;
+      this.isLoadingRefreshToken = true;
 
       try {
         const response = await axios.post("/auth/refresh-token", {
@@ -115,12 +101,12 @@ export const useAuthStore = defineStore("auth", {
         axios.defaults.headers.common["Authorization"] =
           `Bearer ${response.data.token}`;
 
-        this.loadingRefreshToken = false;
-        toast.success("Session refreshed");
+        this.isLoadingRefreshToken = false;
+        toast.success(response.data.message);
       } catch (error) {
         if (error instanceof AxiosError) {
           void router.push({ name: "Login" });
-          this.loadingRefreshToken = false;
+          this.isLoadingRefreshToken = false;
           toast.error(error.response?.data.message);
         }
       }
