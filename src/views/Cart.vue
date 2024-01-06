@@ -12,11 +12,10 @@ import CartOutline from "@/components/icons/CartOutline.vue";
 
 const cartStore = useCartStore();
 
-const { getCartItems, getSubtotal, isLoadingAddCartItem } =
-  storeToRefs(cartStore);
+const { cartItems, subtotal, isLoadingAddCartItem } = storeToRefs(cartStore);
 
 onMounted(() => {
-  cartStore.getAllCartItems();
+  cartStore.fetchCartItems();
 });
 </script>
 
@@ -25,7 +24,7 @@ onMounted(() => {
     <TopHeader />
     <FwbSpinner size="12" v-if="isLoadingAddCartItem" />
     <div
-      v-else-if="getCartItems.length === 0"
+      v-else-if="cartItems.length === 0"
       class="flex flex-col flex-1 w-full items-center justify-center gap-8 text-center"
     >
       <component
@@ -46,7 +45,7 @@ onMounted(() => {
         <p class="w-[10%]">Quantity</p>
         <p class="w-[20%]">Subtotal</p>
       </div>
-      <CartRow v-for="items in getCartItems" :key="items.id" :items="items" />
+      <CartRow v-for="items in cartItems" :key="items.id" :items="items" />
       <div
         class="flex flex-col-reverse lg:flex-row items-center justify-between py-4"
       >
@@ -60,7 +59,7 @@ onMounted(() => {
           <p class="font-bold">Subtotal</p>
           <h2 class="font-normal">
             {{
-              getSubtotal.toLocaleString("en-US", {
+              subtotal.toLocaleString("en-US", {
                 style: "currency",
                 currency: "IDR",
                 currencyDisplay: "narrowSymbol"

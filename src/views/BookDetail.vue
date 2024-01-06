@@ -37,7 +37,7 @@ const handleRemoveFromCart = async (id: string) => {
 };
 
 const handleAddToWishlist = async (id: string) => {
-  await wishlistStore.addNewWishlist(id);
+  await wishlistStore.addToWishlist(id);
   bookStore.fetchBookDetails(bookDetail.value.id);
 };
 
