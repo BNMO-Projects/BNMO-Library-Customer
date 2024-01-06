@@ -40,6 +40,8 @@ onMounted(() => {
   query.value.limitPerPage = 5;
   query.value.bookType = "ALL";
   wishlistStore.getWishlistData(query.value);
+
+  document.title = "Wishlist - BNMO Library";
 });
 
 const handleSearch = () => {

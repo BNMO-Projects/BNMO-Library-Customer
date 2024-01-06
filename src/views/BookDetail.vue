@@ -17,8 +17,9 @@ const wishlistStore = useWishlistStore();
 
 const { getBookDetail, isLoadingBookDetail } = storeToRefs(bookStore);
 
-onMounted(() => {
-  bookStore.getBookDetails(router.currentRoute.value.params.id as string);
+onMounted(async () => {
+  await bookStore.getBookDetails(router.currentRoute.value.params.id as string);
+  document.title = `${getBookDetail.value.title} - BNMO Library`;
 });
 
 const handleAddToCart = async (id: string) => {
