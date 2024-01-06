@@ -4,7 +4,6 @@
 
 body {
   font-family: "Inter", cursive;
-  color: #2f4f4f;
 }
 
 @layer base {
@@ -23,18 +22,14 @@ body {
 
 @layer components {
   .button-full {
-    @apply bg-secondary-color hover:bg-hover-color w-full text-base font-bold rounded-lg px-4 py-2 inline-flex items-center justify-center gap-2 text-white disabled:cursor-not-allowed;
-  }
-
-  .button-active {
-    @apply bg-hover-color hover:bg-secondary-color w-full text-base font-bold rounded-lg px-4 py-2 inline-flex items-center justify-center gap-2 text-white disabled:cursor-not-allowed;
+    @apply bg-secondary-color dark:bg-secondary-color-dark hover:bg-hover-color dark:hover:bg-hover-color-dark w-full text-base font-bold rounded-lg px-4 py-2 inline-flex items-center justify-center gap-2 text-white disabled:cursor-not-allowed;
   }
 
   .tag-span {
-    @apply bg-tag-color text-sm px-2 rounded-md text-black;
+    @apply bg-tag-color dark:bg-tag-color-dark text-sm px-2 rounded-md text-black;
   }
 
   .book-type-tag {
-    @apply bg-tag-color px-4 py-2 rounded-lg font-bold text-black;
+    @apply bg-tag-color dark:bg-tag-color-dark px-4 py-2 rounded-lg font-bold text-black;
   }
 }
