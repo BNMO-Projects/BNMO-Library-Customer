@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import { onMounted, ref, toRefs, watch } from "vue";
 import { router } from "@/router/router";
+
+import { storeToRefs } from "pinia";
 import { useWishlistStore } from "@/store/wishlist.store";
 import { WishlistSearchQuery } from "@/types/request.type";
-import { FwbInput, FwbButton, FwbSpinner, FwbPagination } from "flowbite-vue";
-import { storeToRefs } from "pinia";
-import { onMounted, ref, toRefs, watch } from "vue";
+
+import { FwbInput, FwbSpinner, FwbPagination, FwbSelect } from "flowbite-vue";
 import WishlistCard from "@/components/my-library/WishlistCard.vue";
+import SearchLoopOutline from "@/components/icons/SearchLoopOutline.vue";
+import HeartOutline from "@/components/icons/HeartOutline.vue";
 
 const props = defineProps({
   isLg: {
@@ -18,6 +22,12 @@ const { isLg } = toRefs(props);
 const wishlistStore = useWishlistStore();
 const page = ref(1);
 const query = ref({} as WishlistSearchQuery);
+
+const bookTypeOptions = [
+  { name: "ALL", value: "ALL" },
+  { name: "BORROWABLE", value: "BORROWABLE" },
+  { name: "ONSALE", value: "ONSALE" }
+];
 
 const { getWishlist, getWishlistMetadata, isLoadingWishlist } =
   storeToRefs(wishlistStore);
@@ -32,6 +42,8 @@ onMounted(() => {
   query.value.limitPerPage = 5;
   query.value.bookType = "ALL";
   wishlistStore.getWishlistData(query.value);
+
+  document.title = "Wishlist - BNMO Library";
 });
 
 const handleSearch = () => {
@@ -63,9 +75,12 @@ watch(page, () => {
   </div>
   <div
     v-else-if="getWishlist.length === 0"
-    class="flex flex-col flex-1 w-full items-center justify-center gap-8"
+    class="flex flex-col flex-1 w-full items-center justify-center gap-8 text-center"
   >
-    <img src="/icons/heart_outline.svg" alt="Empty cart" class="w-32" />
+    <component
+      :is="HeartOutline"
+      custom-class="text-black dark:text-white w-32"
+    />
     <h2>Your wishlist is empty right now.</h2>
     <p>Start adding your favorite items to it and keep them saved for later!</p>
   </div>
@@ -79,22 +94,24 @@ watch(page, () => {
         class="w-full"
       >
         <template #prefix>
-          <img
-            src="/icons/search_loop_outline.svg"
-            alt="Search loop"
-            class="w-5"
+          <component
+            :is="SearchLoopOutline"
+            custom-class="text-black dark:text-white w-5 h-5"
           />
         </template>
       </FwbInput>
-      <FwbButton
-        class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-1/5 h-fit text-base font-bold inline-flex items-center justify-center text-black"
+      <FwbSelect v-model="query.bookType" :options="bookTypeOptions" />
+      <button
         @click="handleSearch"
+        class="button-full lg:w-1/5"
+        :disabled="isLoadingWishlist"
       >
+        <FwbSpinner v-if="isLoadingWishlist" />
         Search
-      </FwbButton>
+      </button>
     </div>
 
-    <div class="flex flex-col w-full">
+    <div class="flex flex-col w-full gap-4">
       <WishlistCard
         v-for="item in getWishlist"
         :key="item.id"

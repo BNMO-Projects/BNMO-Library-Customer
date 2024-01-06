@@ -4,7 +4,6 @@ import LoggedLayout from "@/components/global/LoggedLayout.vue";
 import TopHeader from "@/components/global/TopHeader.vue";
 import Wishlist from "@/components/my-library/Wishlist.vue";
 
-const isLg = ref(window.screen.width > 1023);
 const tabs = [
   { id: "wishlist", name: "Wishlist", query: { page: 1 } },
   {
@@ -13,13 +12,17 @@ const tabs = [
     path: "/currently-borrowed"
   }
 ];
+
+const isLg = ref(window.screen.width > 1023);
 const activeTab = ref(tabs[0].id);
 </script>
 
 <template>
   <LoggedLayout @resize-lg="(value) => (isLg = value)">
     <TopHeader />
-    <div class="flex flex-col flex-1 text-black gap-4">
+    <div
+      class="flex flex-col flex-1 text-text-color dark:text-text-color-dark gap-4"
+    >
       <ul
         class="flex flex-wrap text-base font-bold text-center text-gray-500 dark:text-gray-400"
       >
@@ -30,9 +33,11 @@ const activeTab = ref(tabs[0].id);
               query: tab.query,
               params: { tab: tab.id }
             }"
-            class="inline-block px-4 py-3 text-black rounded-lg hover:bg-yellow-mustard"
+            class="inline-block px-4 py-3 rounded-lg hover:bg-secondary-color hover:text-white"
             :class="
-              $route.params.tab === tab.id ? 'bg-yellow-mustard' : undefined
+              $route.params.tab === tab.id
+                ? 'bg-secondary-color text-white'
+                : 'text-black dark:text-white'
             "
           >
             {{ tab.name }}

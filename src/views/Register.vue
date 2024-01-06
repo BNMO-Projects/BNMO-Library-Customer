@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { FwbButton, FwbInput } from "flowbite-vue";
+
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/auth.store";
 import { RegisterRequest } from "@/types/request.type";
 import { RegisterErrorDetails } from "@/types/response.type";
-import { useAuthStore } from "@/store/auth.store";
-import { storeToRefs } from "pinia";
+
+import { FwbSpinner, FwbInput } from "flowbite-vue";
+import UserSolid from "@/components/icons/UserSolid.vue";
+import UsersSolid from "@/components/icons/UsersSolid.vue";
+import EnvelopeSolid from "@/components/icons/EnvelopeSolid.vue";
+import UserSettingsSolid from "@/components/icons/UserSettingsSolid.vue";
+import LockSolid from "@/components/icons/LockSolid.vue";
 
 const authStore = useAuthStore();
 const form = ref({} as RegisterRequest);
@@ -62,7 +69,9 @@ watch(errorRegister, () => {
 </script>
 
 <template>
-  <main class="flex flex-row-reverse min-h-screen">
+  <main
+    class="flex flex-row-reverse min-h-screen text-text-color dark:text-text-color-dark"
+  >
     <section class="w-1/2 relative hidden lg:block">
       <div>
         <img
@@ -84,7 +93,7 @@ watch(errorRegister, () => {
       </div>
     </section>
     <section
-      class="w-full lg:w-1/2 bg-sky-blue flex flex-col items-center justify-center py-8"
+      class="w-full lg:w-1/2 bg-main-color dark:bg-main-color-dark flex flex-col items-center justify-center py-8"
     >
       <h1 class="text-center">Register Account</h1>
       <form
@@ -108,7 +117,10 @@ watch(errorRegister, () => {
             required
           >
             <template #prefix>
-              <img src="/icons/user_solid.svg" class="w-4" />
+              <component
+                :is="UserSolid"
+                custom-class="text-black dark:text-white w-4 h-4"
+              />
             </template>
           </FwbInput>
           <FwbInput
@@ -119,7 +131,10 @@ watch(errorRegister, () => {
             type="text"
           >
             <template #prefix>
-              <img src="/icons/users_solid.svg" class="w-5" />
+              <component
+                :is="UsersSolid"
+                custom-class="text-black dark:text-white w-4 h-4"
+              />
             </template>
           </FwbInput>
           <FwbInput
@@ -132,7 +147,10 @@ watch(errorRegister, () => {
             :validation-status="errors.email ? 'error' : undefined"
           >
             <template #prefix>
-              <img src="/icons/envelope_solid.svg" class="w-5" />
+              <component
+                :is="EnvelopeSolid"
+                custom-class="text-black dark:text-white w-4 h-4"
+              />
             </template>
             <template v-if="errors.email" #validationMessage>
               {{ errors.email }}
@@ -148,7 +166,10 @@ watch(errorRegister, () => {
             :validation-status="errors.username ? 'error' : undefined"
           >
             <template #prefix>
-              <img src="/icons/user_settings_solid.svg" class="w-5" />
+              <component
+                :is="UserSettingsSolid"
+                custom-class="text-black dark:text-white w-4 h-4"
+              />
             </template>
             <template v-if="errors.username" #validationMessage>
               {{ errors.username }}
@@ -164,7 +185,10 @@ watch(errorRegister, () => {
             :validation-status="errors.password ? 'error' : undefined"
           >
             <template #prefix>
-              <img src="/icons/lock_solid.svg" class="w-4" />
+              <component
+                :is="LockSolid"
+                custom-class="text-black dark:text-white w-4 h-4"
+              />
             </template>
             <template v-if="errors.password" #validationMessage>
               {{ errors.password }}
@@ -182,7 +206,10 @@ watch(errorRegister, () => {
             "
           >
             <template #prefix>
-              <img src="/icons/lock_solid.svg" class="w-4" />
+              <component
+                :is="LockSolid"
+                custom-class="text-black dark:text-white w-4 h-4"
+              />
             </template>
             <template v-if="errors.password_confirmation" #validationMessage>
               {{ errors.password_confirmation }}
@@ -191,13 +218,10 @@ watch(errorRegister, () => {
         </div>
 
         <div class="flex flex-col w-full items-center gap-4">
-          <FwbButton
-            type="submit"
-            :loading="isLoadingRegister"
-            class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full text-base font-bold inline-flex items-center justify-center text-black"
-          >
+          <button type="submit" class="button-full">
+            <FwbSpinner v-if="isLoadingRegister" />
             Register
-          </FwbButton>
+          </button>
           <p>
             Already have an account?
             <RouterLink

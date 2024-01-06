@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCartStore } from "@/store/cart.store";
 import { WishlistResponse } from "@/types/response.type";
-import { FwbButton } from "flowbite-vue";
+import CartPlusSolid from "@/components/icons/CartPlusSolid.vue";
 
 defineProps({
   wishlist: {
@@ -18,7 +18,9 @@ const handleAddToCart = (id: string) => {
 </script>
 
 <template>
-  <div class="hidden lg:flex rounded-md p-4 gap-4 shadow-md w-full">
+  <div
+    class="hidden lg:flex rounded-md p-4 gap-4 bg-container-color dark:bg-container-color-dark shadow-md w-full"
+  >
     <img
       :src="wishlist.book_cover"
       :alt="wishlist.id"
@@ -41,24 +43,22 @@ const handleAddToCart = (id: string) => {
               })
             }}
           </p>
-          <span
-            class="bg-orange-coral px-4 py-2 rounded-lg font-bold right-0 top-0"
-          >
+          <span class="book-type-tag">
             {{ wishlist.book_type }}
           </span>
         </div>
       </div>
       <div class="flex justify-between">
         <div class="flex gap-4 items-center">
-          <span class="bg-orange-coral text-sm px-2 rounded-md">
+          <span class="tag-span">
             {{ wishlist.category_name }}
           </span>
 
-          <span class="bg-orange-coral text-sm px-2 rounded-md">
+          <span class="tag-span">
             {{ wishlist.genre_name }}
           </span>
 
-          <span class="bg-orange-coral text-sm px-2 rounded-md">
+          <span class="tag-span">
             {{ wishlist.language_name }}
           </span>
         </div>
@@ -71,20 +71,10 @@ const handleAddToCart = (id: string) => {
 
       <div class="flex flex-col lg:flex-row gap-4">
         <RouterLink :to="'/book-detail/' + wishlist.book_id">
-          <FwbButton
-            class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full h-fit text-base font-bold inline-flex items-center justify-center text-black"
-          >
-            See Details
-          </FwbButton>
+          <button class="button-full">See Details</button>
         </RouterLink>
-        <button
-          class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
-        >
-          <img
-            src="/icons/cart_plus_solid.svg"
-            alt="Wishlist heart"
-            class="w-5"
-          />
+        <button class="button-full w-fit">
+          <component :is="CartPlusSolid" custom-class="text-white" />
           <p v-if="wishlist.price" @click="handleAddToCart(wishlist.book_id)">
             Add to cart for
             {{
@@ -101,7 +91,9 @@ const handleAddToCart = (id: string) => {
     </div>
   </div>
 
-  <div class="flex lg:hidden flex-col rounded-md p-4 gap-4 shadow-md">
+  <div
+    class="flex lg:hidden flex-col rounded-md p-4 gap-4 bg-container-color shadow-md"
+  >
     <div class="flex w-full gap-2">
       <img
         :src="wishlist.book_cover"
@@ -109,39 +101,26 @@ const handleAddToCart = (id: string) => {
         class="rounded-md w-24"
       />
       <div class="flex flex-col gap-2">
-        <h3>{{ wishlist.title }}</h3>
+        <h3 class="line-clamp-2">{{ wishlist.title }}</h3>
         <p>{{ wishlist.author_name }}</p>
         <p class="font-bold">
           Stock: {{ wishlist.current_stock }} /
           {{ wishlist.original_stock }}
         </p>
+        <span class="tag-span w-fit font-bold">
+          {{ wishlist.book_type }}
+        </span>
       </div>
     </div>
     <div class="flex flex-col lg:flex-row gap-4">
       <RouterLink :to="'/book-detail/' + wishlist.book_id">
-        <FwbButton
-          class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full h-fit text-base font-bold inline-flex items-center justify-center text-black"
-        >
-          See Details
-        </FwbButton>
+        <button class="button-full">See Details</button>
       </RouterLink>
-      <button
-        class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
-      >
-        <img
-          src="/icons/cart_plus_solid.svg"
-          alt="Wishlist heart"
-          class="w-5"
-        />
+      <button class="button-full">
+        <component :is="CartPlusSolid" custom-class="text-white" />
         <p v-if="wishlist.price" @click="handleAddToCart(wishlist.book_id)">
-          Add to cart for
-          {{
-            wishlist.price.toLocaleString("en-US", {
-              style: "currency",
-              currency: "IDR",
-              currencyDisplay: "narrowSymbol"
-            })
-          }}
+          Add to cart for Rp
+          {{ (wishlist.price / 1000).toFixed(1) + "K" }}
         </p>
         <p v-else @click="handleAddToCart(wishlist.book_id)">Add to cart</p>
       </button>

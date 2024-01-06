@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useCartStore } from "@/store/cart.store";
 import { CartItemListResponse } from "@/types/response.type";
+import CloseOutline from "@/components/icons/CloseOutline.vue";
+
 defineProps({
   items: {
     type: Object as () => CartItemListResponse,
@@ -16,9 +18,11 @@ const handleRemoveItem = (id: string) => {
 </script>
 
 <template>
-  <div class="lg:flex items-center border-b border-b-black/20 p-4 hidden">
+  <div
+    class="lg:flex items-center border-b border-b-black/20 dark:border-b-white p-4 hidden"
+  >
     <div class="flex items-center gap-4 w-[30%]">
-      <img :src="items.book_cover" class="w-16" />
+      <img :src="items.book_cover" class="w-20" />
       <RouterLink
         :to="'/book-detail/' + items.book_id"
         class="flex flex-col hover:cursor-pointer hover:underline"
@@ -28,7 +32,7 @@ const handleRemoveItem = (id: string) => {
       </RouterLink>
     </div>
     <div class="w-1/5 text-center">
-      <span class="bg-orange-coral px-4 py-2 rounded-lg font-bold">
+      <span class="book-type-tag">
         {{ items.book_type }}
       </span>
     </div>
@@ -55,15 +59,14 @@ const handleRemoveItem = (id: string) => {
           : "-"
       }}
     </p>
-    <img
-      src="/icons/close_outline.svg"
-      alt="Remove item"
-      class="w-3 hover:cursor-pointer"
+    <component
+      :is="CloseOutline"
       @click="handleRemoveItem(items.id)"
+      custom-class="w-3 h-3 text-black dark:text-white hover:cursor-pointer"
     />
   </div>
   <div class="flex items-center gap-4 lg:hidden">
-    <img :src="items.book_cover" class="w-24" />
+    <img :src="items.book_cover" class="w-16" />
     <div class="flex flex-col w-4/5">
       <RouterLink
         :to="'/book-detail/' + items.book_id"
@@ -83,11 +86,10 @@ const handleRemoveItem = (id: string) => {
         }}
       </p>
     </div>
-    <img
-      src="/icons/close_outline.svg"
-      alt="Remove item"
-      class="w-3 hover:cursor-pointer"
+    <component
+      :is="CloseOutline"
       @click="handleRemoveItem(items.id)"
+      custom-class="w-3 h-3 text-black dark:text-white hover:cursor-pointer"
     />
   </div>
 </template>

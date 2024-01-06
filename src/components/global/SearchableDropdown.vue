@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, toRefs } from "vue";
-import { FwbInput, FwbSpinner } from "flowbite-vue";
 import debounce from "debounce";
 import { onClickOutside } from "@vueuse/core";
+
+import { FwbInput, FwbSpinner } from "flowbite-vue";
+import AngleDownOutline from "@/components/icons/AngleDownOutline.vue";
+import CloseOutline from "@/components/icons/CloseOutline.vue";
 
 const props = defineProps({
   placeholder: {
@@ -68,7 +71,7 @@ onClickOutside(dropdown, () => (open.value = false));
       @focus="open = true"
     >
       <div
-        class="flex bg-gray-50 pr-4 rounded-lg items-center focus-within:ring-2 focus-within:ring-blue-500"
+        class="flex bg-gray-50 border border-gray-300 pr-4 rounded-lg items-center focus-within:ring-2 focus-within:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         @click="open = !open"
       >
         <FwbInput
@@ -77,29 +80,28 @@ onClickOutside(dropdown, () => (open.value = false));
           :placeholder="placeholder"
           class="border-none focus:border-none focus:ring-0 w-full"
         />
-        <img
+        <component
           v-if="!isLoading && query"
-          src="/icons/close_outline.svg"
-          class="w-3 hover:cursor-pointer mr-3"
+          :is="CloseOutline"
           @click="handleRemoveSelected"
+          custom-class="w-3 h-3 text-black dark:text-white hover:cursor-pointer mr-3"
         />
-        <img
+        <component
           v-if="!isLoading"
-          src="/icons/angle_down_outline.svg"
-          alt="Open Dropdown"
-          class="w-4 hover:cursor-pointer"
+          :is="AngleDownOutline"
+          custom-class="w-3 h-3 text-black dark:text-white hover:cursor-pointer"
         />
         <FwbSpinner v-else size="8" />
       </div>
       <div
-        class="absolute bg-gray-50 mt-12 z-[1] w-full shadow-lg"
+        class="absolute bg-gray-50 dark:bg-gray-700 mt-[2.9rem] z-[1] w-full shadow-lg"
         tabindex="-1"
         :class="open ? 'block' : 'hidden'"
       >
         <div
           v-for="option in options"
           :key="option.id"
-          class="hover:bg-orange-coral p-2 hover:cursor-pointer text-ellipsis"
+          class="hover:bg-secondary-color hover:text-white p-2 hover:cursor-pointer text-ellipsis"
           @click="handleSelectedValue(option)"
         >
           <p>{{ option[optionLabel] }}</p>

@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { FwbAvatar } from "flowbite-vue";
-import { useAuthStore } from "@/store/auth.store";
 import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/store/auth.store";
+
+import { FwbAvatar } from "flowbite-vue";
+import ArrowLeft from "@/components/icons/ArrowLeft.vue";
+import UserCircleSolid from "@/components/icons/UserCircleSolid.vue";
 
 const authStore = useAuthStore();
 const { getUsername } = storeToRefs(authStore);
@@ -9,7 +12,7 @@ const { getUsername } = storeToRefs(authStore);
 
 <template>
   <div
-    class="flex items-center border-b border-b-black pb-4 px-4"
+    class="flex items-center border-b border-b-black dark:border-b-white pb-4 px-4"
     :class="$route.name === 'Book Detail' ? 'justify-between' : 'justify-end'"
   >
     <div
@@ -17,7 +20,7 @@ const { getUsername } = storeToRefs(authStore);
       class="flex items-center gap-4 hover:cursor-pointer"
       @click="$router.back"
     >
-      <img src="/icons/arrow_left.svg" alt="Back button" class="w-6" />
+      <component :is="ArrowLeft" custom-class="text-black dark:text-white" />
       <p class="font-bold">Back</p>
     </div>
     <div class="flex items-center gap-4">
@@ -37,7 +40,10 @@ const { getUsername } = storeToRefs(authStore);
       <div class="flex items-center justify-center gap-2">
         <FwbAvatar rounded>
           <template #placeholder>
-            <img src="/icons/user_solid.svg" alt="Avatar Icon" class="w-7" />
+            <component
+              :is="UserCircleSolid"
+              custom-class="text-black dark:text-white w-12"
+            />
           </template>
         </FwbAvatar>
         <p class="font-bold">{{ getUsername }}</p>

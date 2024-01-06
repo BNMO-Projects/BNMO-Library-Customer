@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import TopHeader from "@/components/global/TopHeader.vue";
-import LoggedLayout from "@/components/global/LoggedLayout.vue";
 import { router } from "@/router/router";
-import { useBookStore } from "@/store/book.store";
+
 import { storeToRefs } from "pinia";
-import { FwbSpinner } from "flowbite-vue";
+import { useBookStore } from "@/store/book.store";
 import { useCartStore } from "@/store/cart.store";
 import { useWishlistStore } from "@/store/wishlist.store";
+
+import { FwbSpinner } from "flowbite-vue";
+import TopHeader from "@/components/global/TopHeader.vue";
+import LoggedLayout from "@/components/global/LoggedLayout.vue";
+import HeartSolid from "@/components/icons/HeartSolid.vue";
+import CartPlusSolid from "@/components/icons/CartPlusSolid.vue";
 
 const bookStore = useBookStore();
 const cartStore = useCartStore();
@@ -15,27 +19,28 @@ const wishlistStore = useWishlistStore();
 
 const { getBookDetail, isLoadingBookDetail } = storeToRefs(bookStore);
 
-onMounted(() => {
-  bookStore.getBookDetails(router.currentRoute.value.params.id as string);
+onMounted(async () => {
+  await bookStore.getBookDetails(router.currentRoute.value.params.id as string);
+  document.title = `${getBookDetail.value.title} - BNMO Library`;
 });
 
-const handleAddToCart = (id: string) => {
-  cartStore.addItemToCart(id);
+const handleAddToCart = async (id: string) => {
+  await cartStore.addItemToCart(id);
   bookStore.getBookDetails(getBookDetail.value.id);
 };
 
-const handleRemoveFromCart = (id: string) => {
-  cartStore.removeItemFromCart(id);
+const handleRemoveFromCart = async (id: string) => {
+  await cartStore.removeItemFromCart(id);
   bookStore.getBookDetails(getBookDetail.value.id);
 };
 
-const handleAddToWishlist = (id: string) => {
-  wishlistStore.addNewWishlist(id);
+const handleAddToWishlist = async (id: string) => {
+  await wishlistStore.addNewWishlist(id);
   bookStore.getBookDetails(getBookDetail.value.id);
 };
 
-const handleRemoveFromWishlist = (id: string) => {
-  wishlistStore.removeFromWishlist(id);
+const handleRemoveFromWishlist = async (id: string) => {
+  await wishlistStore.removeFromWishlist(id);
   bookStore.getBookDetails(getBookDetail.value.id);
 };
 </script>
@@ -57,7 +62,7 @@ const handleRemoveFromWishlist = (id: string) => {
               class="flex flex-col lg:flex-row items-center justify-between gap-4"
             >
               <h1 class="text-center">{{ getBookDetail.title }}</h1>
-              <span class="bg-orange-coral px-4 py-2 rounded-lg font-bold">
+              <span class="book-type-tag">
                 {{ getBookDetail.book_type }}
               </span>
             </div>
@@ -72,37 +77,25 @@ const handleRemoveFromWishlist = (id: string) => {
             >
               <button
                 v-if="!getBookDetail.in_wishlist"
-                class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
+                class="button-full lg:w-fit"
                 @click="handleAddToWishlist(getBookDetail.id)"
               >
-                <img
-                  src="/icons/heart_solid.svg"
-                  alt="Wishlist heart"
-                  class="w-4"
-                />
+                <component :is="HeartSolid" custom-class="text-white" />
                 Add to wishlist
               </button>
               <button
                 v-else
-                class="bg-orange-coral hover:bg-yellow-mustard transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
+                class="button-full lg:w-fit"
                 @click="handleRemoveFromWishlist(getBookDetail.wishlist_id)"
               >
-                <img
-                  src="/icons/heart_solid.svg"
-                  alt="Wishlist heart"
-                  class="w-4"
-                />
+                <component :is="HeartSolid" custom-class="text-white" />
                 Remove from wishlist
               </button>
               <button
                 v-if="!getBookDetail.in_cart"
-                class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
+                class="button-full lg:w-fit"
               >
-                <img
-                  src="/icons/cart_plus_solid.svg"
-                  alt="Wishlist heart"
-                  class="w-5"
-                />
+                <component :is="CartPlusSolid" custom-class="text-white" />
                 <p
                   v-if="getBookDetail.price"
                   @click="handleAddToCart(getBookDetail.id)"
@@ -120,15 +113,8 @@ const handleRemoveFromWishlist = (id: string) => {
                   Add to cart
                 </p>
               </button>
-              <button
-                v-else
-                class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
-              >
-                <img
-                  src="/icons/cart_plus_solid.svg"
-                  alt="Wishlist heart"
-                  class="w-5"
-                />
+              <button v-else class="button-full lg:w-fit">
+                <component :is="CartPlusSolid" custom-class="text-white" />
                 <p @click="handleRemoveFromCart(getBookDetail.cart_item_id)">
                   Remove from cart
                 </p>
@@ -140,15 +126,15 @@ const handleRemoveFromWishlist = (id: string) => {
             </div>
             <div class="flex flex-col flex-wrap lg:flex-row gap-4 items-center">
               <div class="flex gap-4 items-center">
-                <span class="bg-orange-coral text-sm px-2 rounded-md">
+                <span class="tag-span">
                   {{ getBookDetail.category_name }}
                 </span>
 
-                <span class="bg-orange-coral text-sm px-2 rounded-md">
+                <span class="tag-span">
                   {{ getBookDetail.genre_name }}
                 </span>
 
-                <span class="bg-orange-coral text-sm px-2 rounded-md">
+                <span class="tag-span">
                   {{ getBookDetail.language_name }}
                 </span>
               </div>
@@ -162,7 +148,7 @@ const handleRemoveFromWishlist = (id: string) => {
         </div>
         <div class="flex flex-col w-full gap-4 mb-12 lg:mb-0">
           <h3>Description</h3>
-          <p>{{ getBookDetail.description }}</p>
+          <p class="text-justify">{{ getBookDetail.description }}</p>
         </div>
       </div>
     </div>
