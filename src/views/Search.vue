@@ -16,7 +16,7 @@ const page = ref(1);
 const isLg = ref(window.screen.width > 1023);
 const isThreeXl = ref(window.screen.width > 1919);
 
-const { getBooks, getBooksMetadata, isLoadingBooks } = storeToRefs(bookStore);
+const { books, booksMetadata, isLoadingBooks } = storeToRefs(bookStore);
 
 onMounted(() => {
   const pageQuery = router.currentRoute.value.query.page;
@@ -92,23 +92,23 @@ watch(page, () => {
         <h2>Search result</h2>
         <div
           :class="`3xl:grid-cols-6 3xl:grid-rows-${rowsThreeXl(
-            getBooksMetadata.total,
+            booksMetadata.total,
             page
           )} lg:grid-cols-5 lg:grid-rows-${rowsLg(
-            getBooksMetadata.total,
+            booksMetadata.total,
             page
           )} md:grid-cols-4 md:grid-rows-${rowsMd(
-            getBooksMetadata.total,
+            booksMetadata.total,
             page
-          )} grid-cols-2 grid-rows-${rowsBase(getBooksMetadata.total, page)}`"
+          )} grid-cols-2 grid-rows-${rowsBase(booksMetadata.total, page)}`"
           class="grid gap-8"
         >
-          <BookCard v-for="book in getBooks" :key="book.id" :book="book" />
+          <BookCard v-for="book in books" :key="book.id" :book="book" />
         </div>
         <div class="flex w-full items-center justify-center mb-12 lg:mb-0">
           <FwbPagination
             v-model="page"
-            :total-pages="getBooksMetadata.totalPage"
+            :total-pages="booksMetadata.totalPage"
             show-icons
             :slice-length="isLg ? 2 : 1"
             large

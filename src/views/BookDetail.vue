@@ -17,31 +17,33 @@ const bookStore = useBookStore();
 const cartStore = useCartStore();
 const wishlistStore = useWishlistStore();
 
-const { getBookDetail, isLoadingBookDetail } = storeToRefs(bookStore);
+const { bookDetail, isLoadingBookDetail } = storeToRefs(bookStore);
 
 onMounted(async () => {
-  await bookStore.getBookDetails(router.currentRoute.value.params.id as string);
-  document.title = `${getBookDetail.value.title} - BNMO Library`;
+  await bookStore.fetchBookDetails(
+    router.currentRoute.value.params.id as string
+  );
+  document.title = `${bookDetail.value.title} - BNMO Library`;
 });
 
 const handleAddToCart = async (id: string) => {
   await cartStore.addItemToCart(id);
-  bookStore.getBookDetails(getBookDetail.value.id);
+  bookStore.fetchBookDetails(bookDetail.value.id);
 };
 
 const handleRemoveFromCart = async (id: string) => {
   await cartStore.removeItemFromCart(id);
-  bookStore.getBookDetails(getBookDetail.value.id);
+  bookStore.fetchBookDetails(bookDetail.value.id);
 };
 
 const handleAddToWishlist = async (id: string) => {
   await wishlistStore.addNewWishlist(id);
-  bookStore.getBookDetails(getBookDetail.value.id);
+  bookStore.fetchBookDetails(bookDetail.value.id);
 };
 
 const handleRemoveFromWishlist = async (id: string) => {
   await wishlistStore.removeFromWishlist(id);
-  bookStore.getBookDetails(getBookDetail.value.id);
+  bookStore.fetchBookDetails(bookDetail.value.id);
 };
 </script>
 
@@ -53,32 +55,30 @@ const handleRemoveFromWishlist = async (id: string) => {
       <div v-else class="flex flex-col w-full p-0 lg:p-4 gap-8">
         <div class="flex flex-col lg:flex-row items-center gap-4">
           <img
-            :src="getBookDetail.book_cover"
-            :alt="getBookDetail.id"
+            :src="bookDetail.book_cover"
+            :alt="bookDetail.id"
             class="w-48 rounded-md"
           />
           <div class="flex flex-col gap-4 w-full">
             <div
               class="flex flex-col lg:flex-row items-center justify-between gap-4"
             >
-              <h1 class="text-center">{{ getBookDetail.title }}</h1>
+              <h1 class="text-center">{{ bookDetail.title }}</h1>
               <span class="book-type-tag">
-                {{ getBookDetail.book_type }}
+                {{ bookDetail.book_type }}
               </span>
             </div>
             <h3 class="text-center lg:text-left">
-              {{ getBookDetail.author_name }}
+              {{ bookDetail.author_name }}
             </h3>
-            <p class="text-center lg:text-left">
-              ISBN: {{ getBookDetail.isbn }}
-            </p>
+            <p class="text-center lg:text-left">ISBN: {{ bookDetail.isbn }}</p>
             <div
               class="flex flex-col lg:flex-row gap-4 border-t border-t-black pt-4 items-center"
             >
               <button
-                v-if="!getBookDetail.in_wishlist"
+                v-if="!bookDetail.in_wishlist"
                 class="button-full lg:w-fit"
-                @click="handleAddToWishlist(getBookDetail.id)"
+                @click="handleAddToWishlist(bookDetail.id)"
               >
                 <component :is="HeartSolid" custom-class="text-white" />
                 Add to wishlist
@@ -86,69 +86,66 @@ const handleRemoveFromWishlist = async (id: string) => {
               <button
                 v-else
                 class="button-full lg:w-fit"
-                @click="handleRemoveFromWishlist(getBookDetail.wishlist_id)"
+                @click="handleRemoveFromWishlist(bookDetail.wishlist_id)"
               >
                 <component :is="HeartSolid" custom-class="text-white" />
                 Remove from wishlist
               </button>
-              <button
-                v-if="!getBookDetail.in_cart"
-                class="button-full lg:w-fit"
-              >
+              <button v-if="!bookDetail.in_cart" class="button-full lg:w-fit">
                 <component :is="CartPlusSolid" custom-class="text-white" />
                 <p
-                  v-if="getBookDetail.price"
-                  @click="handleAddToCart(getBookDetail.id)"
+                  v-if="bookDetail.price"
+                  @click="handleAddToCart(bookDetail.id)"
                 >
                   Add to cart for
                   {{
-                    getBookDetail.price.toLocaleString("en-US", {
+                    bookDetail.price.toLocaleString("en-US", {
                       style: "currency",
                       currency: "IDR",
                       currencyDisplay: "narrowSymbol"
                     })
                   }}
                 </p>
-                <p v-else @click="handleAddToCart(getBookDetail.id)">
+                <p v-else @click="handleAddToCart(bookDetail.id)">
                   Add to cart
                 </p>
               </button>
               <button v-else class="button-full lg:w-fit">
                 <component :is="CartPlusSolid" custom-class="text-white" />
-                <p @click="handleRemoveFromCart(getBookDetail.cart_item_id)">
+                <p @click="handleRemoveFromCart(bookDetail.cart_item_id)">
                   Remove from cart
                 </p>
               </button>
               <p class="font-bold">
-                Stock: {{ getBookDetail.current_stock }} /
-                {{ getBookDetail.original_stock }}
+                Stock: {{ bookDetail.current_stock }} /
+                {{ bookDetail.original_stock }}
               </p>
             </div>
             <div class="flex flex-col flex-wrap lg:flex-row gap-4 items-center">
               <div class="flex gap-4 items-center">
                 <span class="tag-span">
-                  {{ getBookDetail.category_name }}
+                  {{ bookDetail.category_name }}
                 </span>
 
                 <span class="tag-span">
-                  {{ getBookDetail.genre_name }}
+                  {{ bookDetail.genre_name }}
                 </span>
 
                 <span class="tag-span">
-                  {{ getBookDetail.language_name }}
+                  {{ bookDetail.language_name }}
                 </span>
               </div>
 
               <p class="font-bold">
                 Publication:
-                {{ new Date(getBookDetail.publication_year).getFullYear() }}
+                {{ new Date(bookDetail.publication_year).getFullYear() }}
               </p>
             </div>
           </div>
         </div>
         <div class="flex flex-col w-full gap-4 mb-12 lg:mb-0">
           <h3>Description</h3>
-          <p class="text-justify">{{ getBookDetail.description }}</p>
+          <p class="text-justify">{{ bookDetail.description }}</p>
         </div>
       </div>
     </div>

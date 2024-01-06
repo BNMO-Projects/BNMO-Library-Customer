@@ -15,11 +15,11 @@ const bookStore = useBookStore();
 
 const {
   isLoadingBooks,
-  getCategories,
+  categories,
   isLoadingCategories,
-  getGenres,
+  genres,
   isLoadingGenres,
-  getLanguages,
+  languages,
   isLoadingLanguages
 } = storeToRefs(bookStore);
 
@@ -45,14 +45,14 @@ const { page, limit } = toRefs(props);
 const query = ref({} as CatalogSearchQuery);
 
 onMounted(() => {
-  bookStore.getCategoriesList(undefined);
-  bookStore.getGenresList(undefined);
-  bookStore.getLanguagesList(undefined);
+  bookStore.fetchCategories(undefined);
+  bookStore.fetchGenres(undefined);
+  bookStore.fetchLanguages(undefined);
 
   query.value.currentPage = page.value;
   query.value.limitPerPage = limit.value;
   query.value.bookType = "ALL";
-  bookStore.getBooksList(query.value);
+  bookStore.fetchBooks(query.value);
 });
 
 const handleSearch = () => {
@@ -60,12 +60,12 @@ const handleSearch = () => {
   if (page.value !== 1) {
     router.push({ name: "Search", query: { page: 1 } });
   }
-  bookStore.getBooksList(query.value);
+  bookStore.fetchBooks(query.value);
 };
 
 watch(page, () => {
   query.value.currentPage = page.value;
-  bookStore.getBooksList(query.value);
+  bookStore.fetchBooks(query.value);
 });
 </script>
 
@@ -108,32 +108,32 @@ watch(page, () => {
     <div class="flex flex-col lg:flex-row w-full gap-4 items-end">
       <SearchableDropdown
         placeholder="Search category"
-        :options="getCategories"
+        :options="categories"
         label="Category"
-        optionLabel="name"
+        optionLabel="genres"
         trackBy="name"
         :isLoading="isLoadingCategories"
-        @searchQuery="(query) => bookStore.getCategoriesList(query)"
+        @searchQuery="(query) => bookStore.fetchCategories(query)"
         @selectedValue="(value) => (query.category = value)"
       />
       <SearchableDropdown
         placeholder="Search genres"
-        :options="getGenres"
+        :options="genres"
         label="Genre"
         optionLabel="name"
         trackBy="name"
         :isLoading="isLoadingGenres"
-        @searchQuery="(query) => bookStore.getGenresList(query)"
+        @searchQuery="(query) => bookStore.fetchGenres(query)"
         @selectedValue="(value) => (query.genre = value)"
       />
       <SearchableDropdown
         placeholder="Search languages"
-        :options="getLanguages"
+        :options="languages"
         label="Language"
         optionLabel="name"
         trackBy="name"
         :isLoading="isLoadingLanguages"
-        @searchQuery="(query) => bookStore.getLanguagesList(query)"
+        @searchQuery="(query) => bookStore.fetchLanguages(query)"
         @selectedValue="(value) => (query.language = value)"
       />
       <FwbSelect
