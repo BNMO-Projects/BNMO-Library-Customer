@@ -1,19 +1,50 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
+import { router } from "@/router/router";
+
+import { storeToRefs } from "pinia";
+import { useBookStore } from "@/store/book.store";
+import { useCartStore } from "@/store/cart.store";
+import { useWishlistStore } from "@/store/wishlist.store";
+
+import { FwbSpinner } from "flowbite-vue";
 import TopHeader from "@/components/global/TopHeader.vue";
 import LoggedLayout from "@/components/global/LoggedLayout.vue";
-import { router } from "@/router/router";
-import { useBookStore } from "@/store/book.store";
-import { storeToRefs } from "pinia";
-import { FwbSpinner } from "flowbite-vue";
+import HeartSolid from "@/components/icons/HeartSolid.vue";
+import CartPlusSolid from "@/components/icons/CartPlusSolid.vue";
 
 const bookStore = useBookStore();
+const cartStore = useCartStore();
+const wishlistStore = useWishlistStore();
 
-const { getBookDetail, isLoadingBookDetail } = storeToRefs(bookStore);
+const { bookDetail, isLoadingBookDetail } = storeToRefs(bookStore);
 
-onMounted(() => {
-  bookStore.getBookDetails(router.currentRoute.value.params.id as string);
+onMounted(async () => {
+  await bookStore.fetchBookDetails(
+    router.currentRoute.value.params.id as string
+  );
+  document.title = `${bookDetail.value.title} - BNMO Library`;
 });
+
+const handleAddToCart = async (id: string) => {
+  await cartStore.addItemToCart(id);
+  bookStore.fetchBookDetails(bookDetail.value.id);
+};
+
+const handleRemoveFromCart = async (id: string) => {
+  await cartStore.removeItemFromCart(id);
+  bookStore.fetchBookDetails(bookDetail.value.id);
+};
+
+const handleAddToWishlist = async (id: string) => {
+  await wishlistStore.addToWishlist(id);
+  bookStore.fetchBookDetails(bookDetail.value.id);
+};
+
+const handleRemoveFromWishlist = async (id: string) => {
+  await wishlistStore.removeFromWishlist(id);
+  bookStore.fetchBookDetails(bookDetail.value.id);
+};
 </script>
 
 <template>
@@ -24,88 +55,97 @@ onMounted(() => {
       <div v-else class="flex flex-col w-full p-0 lg:p-4 gap-8">
         <div class="flex flex-col lg:flex-row items-center gap-4">
           <img
-            :src="getBookDetail.book_cover"
-            :alt="getBookDetail.id"
+            :src="bookDetail.book_cover"
+            :alt="bookDetail.id"
             class="w-48 rounded-md"
           />
           <div class="flex flex-col gap-4 w-full">
             <div
               class="flex flex-col lg:flex-row items-center justify-between gap-4"
             >
-              <h1 class="text-center">{{ getBookDetail.title }}</h1>
-              <span class="bg-orange-coral px-4 py-2 rounded-lg font-bold">
-                {{ getBookDetail.book_type }}
+              <h1 class="text-center">{{ bookDetail.title }}</h1>
+              <span class="book-type-tag">
+                {{ bookDetail.book_type }}
               </span>
             </div>
             <h3 class="text-center lg:text-left">
-              {{ getBookDetail.author_name }}
+              {{ bookDetail.author_name }}
             </h3>
-            <p class="text-center lg:text-left">
-              ISBN: {{ getBookDetail.isbn }}
-            </p>
+            <p class="text-center lg:text-left">ISBN: {{ bookDetail.isbn }}</p>
             <div
               class="flex flex-col lg:flex-row gap-4 border-t border-t-black pt-4 items-center"
             >
               <button
-                class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
+                v-if="!bookDetail.in_wishlist"
+                class="button-full lg:w-fit"
+                @click="handleAddToWishlist(bookDetail.id)"
               >
-                <img
-                  src="/icons/heart_solid.svg"
-                  alt="Wishlist heart"
-                  class="w-4"
-                />
+                <component :is="HeartSolid" custom-class="text-white" />
                 Add to wishlist
               </button>
               <button
-                class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-fit text-base font-bold rounded-lg px-4 py-2 flex items-center justify-center gap-2"
+                v-else
+                class="button-full lg:w-fit"
+                @click="handleRemoveFromWishlist(bookDetail.wishlist_id)"
               >
-                <img
-                  src="/icons/cart_plus_solid.svg"
-                  alt="Wishlist heart"
-                  class="w-5"
-                />
-                <p v-if="getBookDetail.price">
+                <component :is="HeartSolid" custom-class="text-white" />
+                Remove from wishlist
+              </button>
+              <button v-if="!bookDetail.in_cart" class="button-full lg:w-fit">
+                <component :is="CartPlusSolid" custom-class="text-white" />
+                <p
+                  v-if="bookDetail.price"
+                  @click="handleAddToCart(bookDetail.id)"
+                >
                   Add to cart for
                   {{
-                    getBookDetail.price.toLocaleString("en-US", {
+                    bookDetail.price.toLocaleString("en-US", {
                       style: "currency",
                       currency: "IDR",
                       currencyDisplay: "narrowSymbol"
                     })
                   }}
                 </p>
-                <p v-else>Add to cart</p>
+                <p v-else @click="handleAddToCart(bookDetail.id)">
+                  Add to cart
+                </p>
+              </button>
+              <button v-else class="button-full lg:w-fit">
+                <component :is="CartPlusSolid" custom-class="text-white" />
+                <p @click="handleRemoveFromCart(bookDetail.cart_item_id)">
+                  Remove from cart
+                </p>
               </button>
               <p class="font-bold">
-                Stock: {{ getBookDetail.current_stock }} /
-                {{ getBookDetail.original_stock }}
+                Stock: {{ bookDetail.current_stock }} /
+                {{ bookDetail.original_stock }}
               </p>
             </div>
             <div class="flex flex-col flex-wrap lg:flex-row gap-4 items-center">
               <div class="flex gap-4 items-center">
-                <span class="bg-orange-coral text-sm px-2 rounded-md">
-                  {{ getBookDetail.category_name }}
+                <span class="tag-span">
+                  {{ bookDetail.category_name }}
                 </span>
 
-                <span class="bg-orange-coral text-sm px-2 rounded-md">
-                  {{ getBookDetail.genre_name }}
+                <span class="tag-span">
+                  {{ bookDetail.genre_name }}
                 </span>
 
-                <span class="bg-orange-coral text-sm px-2 rounded-md">
-                  {{ getBookDetail.language_name }}
+                <span class="tag-span">
+                  {{ bookDetail.language_name }}
                 </span>
               </div>
 
               <p class="font-bold">
                 Publication:
-                {{ new Date(getBookDetail.publication_year).getFullYear() }}
+                {{ new Date(bookDetail.publication_year).getFullYear() }}
               </p>
             </div>
           </div>
         </div>
         <div class="flex flex-col w-full gap-4 mb-12 lg:mb-0">
           <h3>Description</h3>
-          <p>{{ getBookDetail.description }}</p>
+          <p class="text-justify">{{ bookDetail.description }}</p>
         </div>
       </div>
     </div>

@@ -1,42 +1,58 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, toRefs } from "vue";
-import { FwbButton, FwbInput, FwbRadio } from "flowbite-vue";
-import { CatalogSearchQuery } from "@/types/request.type";
-import { useBookStore } from "@/store/book.store";
-import { storeToRefs } from "pinia";
-import SearchableDropdown from "../global/SearchableDropdown.vue";
 import { router } from "@/router/router";
+
+import { storeToRefs } from "pinia";
+import { useBookStore } from "@/store/book.store";
+import { CatalogSearchQuery } from "@/types/request.type";
+
+import { FwbSpinner, FwbInput, FwbSelect } from "flowbite-vue";
+import SearchableDropdown from "@/components/global/SearchableDropdown.vue";
+import SearchLoopOutline from "@/components/icons/SearchLoopOutline.vue";
+import UserSolid from "@/components/icons/UserSolid.vue";
+
+const bookStore = useBookStore();
+
+const {
+  isLoadingBooks,
+  categories,
+  isLoadingCategories,
+  genres,
+  isLoadingGenres,
+  languages,
+  isLoadingLanguages
+} = storeToRefs(bookStore);
+
+const bookTypeOptions = [
+  { name: "ALL", value: "ALL" },
+  { name: "BORROWABLE", value: "BORROWABLE" },
+  { name: "ONSALE", value: "ONSALE" }
+];
 
 const props = defineProps({
   page: {
     type: Number,
     required: true
+  },
+  limit: {
+    type: Number,
+    required: true
   }
 });
 
-const { page } = toRefs(props);
+const { page, limit } = toRefs(props);
 
-const bookStore = useBookStore();
 const query = ref({} as CatalogSearchQuery);
 
-const {
-  getCategories,
-  isLoadingCategories,
-  getGenres,
-  isLoadingGenres,
-  getLanguages,
-  isLoadingLanguages
-} = storeToRefs(bookStore);
-
 onMounted(() => {
-  bookStore.getCategoriesList(undefined);
-  bookStore.getGenresList(undefined);
-  bookStore.getLanguagesList(undefined);
+  bookStore.fetchCategories(undefined);
+  bookStore.fetchGenres(undefined);
+  bookStore.fetchLanguages(undefined);
 
   query.value.currentPage = page.value;
-  query.value.limitPerPage = 10;
+  query.value.limitPerPage = limit.value;
   query.value.bookType = "ALL";
-  bookStore.getBooksList(query.value);
+  bookStore.fetchBooks(query.value);
 });
 
 const handleSearch = () => {
@@ -44,12 +60,12 @@ const handleSearch = () => {
   if (page.value !== 1) {
     router.push({ name: "Search", query: { page: 1 } });
   }
-  bookStore.getBooksList(query.value);
+  bookStore.fetchBooks(query.value);
 };
 
 watch(page, () => {
   query.value.currentPage = page.value;
-  bookStore.getBooksList(query.value);
+  bookStore.fetchBooks(query.value);
 });
 </script>
 
@@ -65,10 +81,9 @@ watch(page, () => {
           type="text"
         >
           <template #prefix>
-            <img
-              src="/icons/search_loop_outline.svg"
-              alt="Search loop"
-              class="w-5"
+            <component
+              :is="SearchLoopOutline"
+              custom-class="text-black dark:text-white w-5 h-5"
             />
           </template>
         </FwbInput>
@@ -82,7 +97,10 @@ watch(page, () => {
           type="text"
         >
           <template #prefix>
-            <img src="/icons/user_solid.svg" alt="Search loop" class="w-4" />
+            <component
+              :is="UserSolid"
+              custom-class="text-black dark:text-white w-5 h-5"
+            />
           </template>
         </FwbInput>
       </div>
@@ -90,69 +108,48 @@ watch(page, () => {
     <div class="flex flex-col lg:flex-row w-full gap-4 items-end">
       <SearchableDropdown
         placeholder="Search category"
-        :options="getCategories"
+        :options="categories"
         label="Category"
-        optionLabel="name"
+        optionLabel="genres"
         trackBy="name"
         :isLoading="isLoadingCategories"
-        @searchQuery="(query) => bookStore.getCategoriesList(query)"
+        @searchQuery="(query) => bookStore.fetchCategories(query)"
         @selectedValue="(value) => (query.category = value)"
       />
       <SearchableDropdown
         placeholder="Search genres"
-        :options="getGenres"
+        :options="genres"
         label="Genre"
         optionLabel="name"
         trackBy="name"
         :isLoading="isLoadingGenres"
-        @searchQuery="(query) => bookStore.getGenresList(query)"
+        @searchQuery="(query) => bookStore.fetchGenres(query)"
         @selectedValue="(value) => (query.genre = value)"
       />
       <SearchableDropdown
         placeholder="Search languages"
-        :options="getLanguages"
+        :options="languages"
         label="Language"
         optionLabel="name"
         trackBy="name"
         :isLoading="isLoadingLanguages"
-        @searchQuery="(query) => bookStore.getLanguagesList(query)"
+        @searchQuery="(query) => bookStore.fetchLanguages(query)"
         @selectedValue="(value) => (query.language = value)"
       />
-      <div class="flex flex-col gap-2 w-full lg:w-1/5">
-        <p class="text-sm">Book Type</p>
-        <ul class="flex gap-4">
-          <li>
-            <FwbRadio
-              v-model="query.bookType"
-              label="All"
-              name="radio-horizontal"
-              value="ALL"
-            />
-          </li>
-          <li>
-            <FwbRadio
-              v-model="query.bookType"
-              label="Borrowable"
-              name="radio-horizontal"
-              value="BORROWABLE"
-            />
-          </li>
-          <li>
-            <FwbRadio
-              v-model="query.bookType"
-              label="Onsale"
-              name="radio-horizontal"
-              value="ONSALE"
-            />
-          </li>
-        </ul>
-      </div>
-      <FwbButton
-        class="bg-yellow-mustard hover:bg-orange-coral transition ease-in-out w-full lg:w-1/5 h-fit text-base font-bold inline-flex items-center justify-center text-black"
+      <FwbSelect
+        v-model="query.bookType"
+        :options="bookTypeOptions"
+        label="Book type"
+        class="w-full lg:w-1/5"
+      />
+      <button
         @click="handleSearch"
+        class="button-full lg:w-1/5"
+        :disabled="isLoadingBooks"
       >
+        <FwbSpinner v-if="isLoadingBooks" />
         Search
-      </FwbButton>
+      </button>
     </div>
   </div>
 </template>
