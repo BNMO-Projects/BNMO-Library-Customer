@@ -7,7 +7,7 @@ import ArrowLeft from "@/components/icons/ArrowLeft.vue";
 import UserCircleSolid from "@/components/icons/UserCircleSolid.vue";
 
 const authStore = useAuthStore();
-const { getUsername } = storeToRefs(authStore);
+const { username } = storeToRefs(authStore);
 </script>
 
 <template>
@@ -46,7 +46,7 @@ const { getUsername } = storeToRefs(authStore);
             />
           </template>
         </FwbAvatar>
-        <p class="font-bold">{{ getUsername }}</p>
+        <p class="font-bold">{{ username }}</p>
       </div>
     </div>
   </div>
