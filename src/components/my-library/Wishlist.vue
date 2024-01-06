@@ -29,7 +29,7 @@ const bookTypeOptions = [
   { name: "ONSALE", value: "ONSALE" }
 ];
 
-const { getWishlist, getWishlistMetadata, isLoadingWishlist } =
+const { wishlist, wishlistMetadata, isLoadingWishlist } =
   storeToRefs(wishlistStore);
 
 onMounted(() => {
@@ -41,7 +41,7 @@ onMounted(() => {
   query.value.currentPage = page.value;
   query.value.limitPerPage = 5;
   query.value.bookType = "ALL";
-  wishlistStore.getWishlistData(query.value);
+  wishlistStore.fetchWishlist(query.value);
 
   document.title = "Wishlist - BNMO Library";
 });
@@ -55,7 +55,7 @@ const handleSearch = () => {
       params: { tab: "wishlist" }
     });
   }
-  wishlistStore.getWishlistData(query.value);
+  wishlistStore.fetchWishlist(query.value);
 };
 
 watch(page, () => {
@@ -65,7 +65,7 @@ watch(page, () => {
     params: { tab: "wishlist" }
   });
   query.value.currentPage = page.value;
-  wishlistStore.getWishlistData(query.value);
+  wishlistStore.fetchWishlist(query.value);
 });
 </script>
 
@@ -74,7 +74,7 @@ watch(page, () => {
     <FwbSpinner size="12" />
   </div>
   <div
-    v-else-if="getWishlist.length === 0"
+    v-else-if="wishlist.length === 0"
     class="flex flex-col flex-1 w-full items-center justify-center gap-8 text-center"
   >
     <component
@@ -112,16 +112,12 @@ watch(page, () => {
     </div>
 
     <div class="flex flex-col w-full gap-4">
-      <WishlistCard
-        v-for="item in getWishlist"
-        :key="item.id"
-        :wishlist="item"
-      />
+      <WishlistCard v-for="item in wishlist" :key="item.id" :wishlist="item" />
     </div>
     <div class="flex w-full items-center justify-center mb-12 lg:mb-0">
       <FwbPagination
         v-model="page"
-        :total-pages="getWishlistMetadata.totalPage"
+        :total-pages="wishlistMetadata.totalPage"
         show-icons
         :slice-length="isLg ? 2 : 1"
         large

@@ -1,7 +1,7 @@
+import { defineStore } from "pinia";
+import axios, { AxiosError } from "axios";
 import { WishlistSearchQuery } from "@/types/request.type";
 import { PageMetadata, WishlistResponse } from "@/types/response.type";
-import axios, { AxiosError } from "axios";
-import { defineStore } from "pinia";
 import { useToast } from "vue-toastification";
 
 const toast = useToast();
@@ -11,21 +11,14 @@ export const useWishlistStore = defineStore("wishlist", {
     return {
       wishlist: [] as Array<WishlistResponse>,
       wishlistMetadata: {} as PageMetadata,
-      loadingWishlist: false,
-      loadingAddWishlist: false,
-      loadingDeleteWishlist: false
+      isLoadingWishlist: false,
+      isLoadingAddWishlist: false,
+      isLoadingDeleteWishlist: false
     };
   },
-  getters: {
-    getWishlist: (state) => state.wishlist,
-    getWishlistMetadata: (state) => state.wishlistMetadata,
-    isLoadingWishlist: (state) => state.loadingWishlist,
-    isLoadingAddWishlist: (state) => state.loadingAddWishlist,
-    isLoadingDeleteWishlist: (state) => state.loadingDeleteWishlist
-  },
   actions: {
-    async getWishlistData(query: WishlistSearchQuery) {
-      this.loadingWishlist = true;
+    async fetchWishlist(query: WishlistSearchQuery) {
+      this.isLoadingWishlist = true;
       try {
         const response = await axios.get("/wishlist", {
           params: {
@@ -38,43 +31,43 @@ export const useWishlistStore = defineStore("wishlist", {
 
         this.wishlist = response.data.data;
         this.wishlistMetadata = response.data.metadata;
-        this.loadingWishlist = false;
+        this.isLoadingWishlist = false;
       } catch (error) {
         if (error instanceof AxiosError) {
           toast.error(error.response?.data.message);
-          this.loadingWishlist = false;
+          this.isLoadingWishlist = false;
         }
       }
     },
 
-    async addNewWishlist(id: string) {
-      this.loadingAddWishlist = true;
+    async addToWishlist(id: string) {
+      this.isLoadingAddWishlist = true;
       try {
         const response = await axios.post("/wishlist", {
           data: { book_id: id }
         });
 
-        this.loadingAddWishlist = false;
+        this.isLoadingAddWishlist = false;
         toast.success(response.data.message);
       } catch (error) {
         if (error instanceof AxiosError) {
           toast.error(error.response?.data.message);
-          this.loadingAddWishlist = false;
+          this.isLoadingAddWishlist = false;
         }
       }
     },
 
     async removeFromWishlist(id: string) {
-      this.loadingDeleteWishlist = true;
+      this.isLoadingDeleteWishlist = true;
       try {
         const response = await axios.delete(`/wishlist/${id}`);
 
-        this.loadingDeleteWishlist = false;
+        this.isLoadingDeleteWishlist = false;
         toast.success(response.data.message);
       } catch (error) {
         if (error instanceof AxiosError) {
           toast.error(error.response?.data.message);
-          this.loadingDeleteWishlist = false;
+          this.isLoadingDeleteWishlist = false;
         }
       }
     }
