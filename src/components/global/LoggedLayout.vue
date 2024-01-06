@@ -35,10 +35,12 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <main class="flex flex-col lg:flex-row min-h-screen">
+  <main
+    class="flex flex-col lg:flex-row min-h-screen text-text-color dark:text-text-color-dark"
+  >
     <Sidebar v-if="isLg" />
     <section
-      class="absolute right-0 bg-main-color w-full lg:w-5/6 flex flex-col p-8 gap-4 min-h-screen"
+      class="absolute right-0 dark:bg-main-color-dark bg-main-color w-full lg:w-5/6 flex flex-col p-8 gap-4 min-h-screen"
     >
       <slot></slot>
     </section>

@@ -30,7 +30,9 @@ const authStore = useAuthStore();
 </script>
 
 <template>
-  <div class="fixed flex w-full bg-secondary-color bottom-0">
+  <div
+    class="fixed flex w-full bg-secondary-color dark:bg-secondary-color-dark bottom-0"
+  >
     <ul class="flex w-full py-4 px-8 justify-between">
       <RouterLink
         v-for="route in routes"
