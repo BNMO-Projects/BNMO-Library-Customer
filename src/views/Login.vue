@@ -4,21 +4,32 @@ import { FwbInput, FwbSpinner } from "flowbite-vue";
 import { LoginRequest } from "@/types/request.type";
 import { useAuthStore } from "@/store/auth.store";
 import { storeToRefs } from "pinia";
+import UserSolid from "@/components/icons/UserSolid.vue";
+import LockSolid from "@/components/icons/LockSolid.vue";
 
 const authStore = useAuthStore();
 const form = ref({} as LoginRequest);
+const darkMode = ref(
+  window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+);
 
 const { isLoadingLogin } = storeToRefs(authStore);
 
 const handleLogin = () => {
   authStore.postLogin(form.value);
 };
+
+window
+  .matchMedia("(prefers-color-scheme: dark)")
+  .addEventListener("change", (event) => {
+    darkMode.value = event.matches ? true : false;
+  });
 </script>
 
 <template>
-  <main class="flex min-h-screen">
+  <main class="flex min-h-screen text-text-color dark:text-text-color-dark">
     <section
-      class="w-1/2 bg-secondary-color text-white hidden lg:flex flex-col items-center justify-center gap-4"
+      class="w-1/2 bg-secondary-color dark:bg-secondary-color-dark text-white hidden lg:flex flex-col items-center justify-center gap-4"
     >
       <img src="/images/login-art.webp" alt="Login art" class="w-96" />
 
@@ -33,10 +44,17 @@ const handleLogin = () => {
       </div>
     </section>
     <section
-      class="w-full lg:w-1/2 bg-main-color flex items-center justify-center"
+      class="w-full lg:w-1/2 bg-main-color dark:bg-main-color-dark flex items-center justify-center"
     >
       <img
+        v-if="!darkMode"
         src="/images/logo.webp"
+        alt="BNMO logo"
+        class="w-32 fixed top-4 right-4 lg:top-8 lg:right-8"
+      />
+      <img
+        v-else
+        src="/images/logo-white.webp"
         alt="BNMO logo"
         class="w-32 fixed top-4 right-4 lg:top-8 lg:right-8"
       />
@@ -60,7 +78,10 @@ const handleLogin = () => {
             required
           >
             <template #prefix>
-              <img src="/icons/user_solid.svg" class="w-4" />
+              <component
+                :is="UserSolid"
+                custom-class="text-black dark:text-white w-4 h-4"
+              />
             </template>
           </FwbInput>
           <FwbInput
@@ -72,7 +93,10 @@ const handleLogin = () => {
             required
           >
             <template #prefix>
-              <img src="/icons/lock_solid.svg" class="w-4" />
+              <component
+                :is="LockSolid"
+                custom-class="text-black dark:text-white w-4 h-4"
+              />
             </template>
           </FwbInput>
         </div>

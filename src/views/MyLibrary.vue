@@ -19,7 +19,9 @@ const activeTab = ref(tabs[0].id);
 <template>
   <LoggedLayout @resize-lg="(value) => (isLg = value)">
     <TopHeader />
-    <div class="flex flex-col flex-1 text-black gap-4">
+    <div
+      class="flex flex-col flex-1 text-text-color dark:text-text-color-dark gap-4"
+    >
       <ul
         class="flex flex-wrap text-base font-bold text-center text-gray-500 dark:text-gray-400"
       >
@@ -34,7 +36,7 @@ const activeTab = ref(tabs[0].id);
             :class="
               $route.params.tab === tab.id
                 ? 'bg-secondary-color text-white'
-                : 'text-black'
+                : 'text-black dark:text-white'
             "
           >
             {{ tab.name }}

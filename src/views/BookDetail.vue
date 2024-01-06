@@ -77,7 +77,7 @@ const handleRemoveFromWishlist = async (id: string) => {
                 class="button-full lg:w-fit"
                 @click="handleAddToWishlist(getBookDetail.id)"
               >
-                <component :is="HeartSolid" color="white" />
+                <component :is="HeartSolid" custom-class="text-white" />
                 Add to wishlist
               </button>
               <button
@@ -85,14 +85,14 @@ const handleRemoveFromWishlist = async (id: string) => {
                 class="button-full lg:w-fit"
                 @click="handleRemoveFromWishlist(getBookDetail.wishlist_id)"
               >
-                <component :is="HeartSolid" color="white" />
+                <component :is="HeartSolid" custom-class="text-white" />
                 Remove from wishlist
               </button>
               <button
                 v-if="!getBookDetail.in_cart"
                 class="button-full lg:w-fit"
               >
-                <component :is="CartPlusSolid" color="white" />
+                <component :is="CartPlusSolid" custom-class="text-white" />
                 <p
                   v-if="getBookDetail.price"
                   @click="handleAddToCart(getBookDetail.id)"
@@ -111,7 +111,7 @@ const handleRemoveFromWishlist = async (id: string) => {
                 </p>
               </button>
               <button v-else class="button-full lg:w-fit">
-                <component :is="CartPlusSolid" color="white" />
+                <component :is="CartPlusSolid" custom-class="text-white" />
                 <p @click="handleRemoveFromCart(getBookDetail.cart_item_id)">
                   Remove from cart
                 </p>
@@ -145,7 +145,7 @@ const handleRemoveFromWishlist = async (id: string) => {
         </div>
         <div class="flex flex-col w-full gap-4 mb-12 lg:mb-0">
           <h3>Description</h3>
-          <p>{{ getBookDetail.description }}</p>
+          <p class="text-justify">{{ getBookDetail.description }}</p>
         </div>
       </div>
     </div>

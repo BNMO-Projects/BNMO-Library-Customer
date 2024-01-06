@@ -6,6 +6,7 @@ import TopHeader from "@/components/global/TopHeader.vue";
 import { useCartStore } from "@/store/cart.store";
 import { storeToRefs } from "pinia";
 import { onMounted } from "vue";
+import CartOutline from "@/components/icons/CartOutline.vue";
 
 const cartStore = useCartStore();
 
@@ -25,14 +26,17 @@ onMounted(() => {
       v-else-if="getCartItems.length === 0"
       class="flex flex-col flex-1 w-full items-center justify-center gap-8 text-center"
     >
-      <img src="/icons/cart_outline.svg" alt="Empty cart" class="w-32" />
+      <component
+        :is="CartOutline"
+        custom-class="text-black dark:text-white w-32"
+      />
       <h2>Your shopping cart is currently empty.</h2>
       <p>Browse our collection to find something you'll love!</p>
     </div>
     <div class="flex flex-col gap-4 lg:gap-0" v-else>
       <h2>Shopping Cart</h2>
       <div
-        class="hidden lg:flex w-full text-center font-bold border-b border-b-black/20 p-4 mb-4"
+        class="hidden lg:flex w-full text-center font-bold border-b border-b-black/20 dark:border-b-white p-4 mb-4"
       >
         <p class="w-[30%]">Book</p>
         <p class="w-1/5">Type</p>
