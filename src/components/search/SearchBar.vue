@@ -1,11 +1,19 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, toRefs } from "vue";
-import { FwbSpinner, FwbInput, FwbRadio } from "flowbite-vue";
+import { FwbSpinner, FwbInput, FwbSelect } from "flowbite-vue";
 import { CatalogSearchQuery } from "@/types/request.type";
 import { useBookStore } from "@/store/book.store";
 import { storeToRefs } from "pinia";
 import SearchableDropdown from "../global/SearchableDropdown.vue";
 import { router } from "@/router/router";
+import SearchLoopOutline from "@/components/icons/SearchLoopOutline.vue";
+import UserSolid from "@/components/icons/UserSolid.vue";
+
+const bookTypeOptions = [
+  { name: "ALL", value: "ALL" },
+  { name: "BORROWABLE", value: "BORROWABLE" },
+  { name: "ONSALE", value: "ONSALE" }
+];
 
 const props = defineProps({
   page: {
@@ -70,10 +78,9 @@ watch(page, () => {
           type="text"
         >
           <template #prefix>
-            <img
-              src="/icons/search_loop_outline.svg"
-              alt="Search loop"
-              class="w-5"
+            <component
+              :is="SearchLoopOutline"
+              custom-class="text-black dark:text-white w-5 h-5"
             />
           </template>
         </FwbInput>
@@ -87,7 +94,10 @@ watch(page, () => {
           type="text"
         >
           <template #prefix>
-            <img src="/icons/user_solid.svg" alt="Search loop" class="w-4" />
+            <component
+              :is="UserSolid"
+              custom-class="text-black dark:text-white w-5 h-5"
+            />
           </template>
         </FwbInput>
       </div>
@@ -123,35 +133,12 @@ watch(page, () => {
         @searchQuery="(query) => bookStore.getLanguagesList(query)"
         @selectedValue="(value) => (query.language = value)"
       />
-      <div class="flex flex-col gap-2 w-full lg:w-1/5">
-        <p class="text-sm">Book Type</p>
-        <ul class="flex gap-4">
-          <li>
-            <FwbRadio
-              v-model="query.bookType"
-              label="All"
-              name="radio-horizontal"
-              value="ALL"
-            />
-          </li>
-          <li>
-            <FwbRadio
-              v-model="query.bookType"
-              label="Borrowable"
-              name="radio-horizontal"
-              value="BORROWABLE"
-            />
-          </li>
-          <li>
-            <FwbRadio
-              v-model="query.bookType"
-              label="Onsale"
-              name="radio-horizontal"
-              value="ONSALE"
-            />
-          </li>
-        </ul>
-      </div>
+      <FwbSelect
+        v-model="query.bookType"
+        :options="bookTypeOptions"
+        label="Book type"
+        class="w-full lg:w-1/5"
+      />
       <button
         @click="handleSearch"
         class="button-full lg:w-1/5"

@@ -19,7 +19,7 @@ const handleAddToCart = (id: string) => {
 
 <template>
   <div
-    class="hidden lg:flex rounded-md p-4 gap-4 bg-container-color shadow-md w-full"
+    class="hidden lg:flex rounded-md p-4 gap-4 bg-container-color dark:bg-container-color-dark shadow-md w-full"
   >
     <img
       :src="wishlist.book_cover"
@@ -74,7 +74,7 @@ const handleAddToCart = (id: string) => {
           <button class="button-full">See Details</button>
         </RouterLink>
         <button class="button-full w-fit">
-          <component :is="CartPlusSolid" color="white" />
+          <component :is="CartPlusSolid" custom-class="text-white" />
           <p v-if="wishlist.price" @click="handleAddToCart(wishlist.book_id)">
             Add to cart for
             {{
@@ -117,7 +117,7 @@ const handleAddToCart = (id: string) => {
         <button class="button-full">See Details</button>
       </RouterLink>
       <button class="button-full">
-        <component :is="CartPlusSolid" color="white" />
+        <component :is="CartPlusSolid" custom-class="text-white" />
         <p v-if="wishlist.price" @click="handleAddToCart(wishlist.book_id)">
           Add to cart for Rp
           {{ (wishlist.price / 1000).toFixed(1) + "K" }}
