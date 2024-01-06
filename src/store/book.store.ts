@@ -1,3 +1,6 @@
+import { defineStore } from "pinia";
+import axios, { AxiosError } from "axios";
+
 import { CatalogSearchQuery } from "@/types/request.type";
 import {
   PageMetadata,
@@ -5,8 +8,7 @@ import {
   BookListResponse,
   BookDetailResponse
 } from "@/types/response.type";
-import axios, { AxiosError } from "axios";
-import { defineStore } from "pinia";
+
 import { useToast } from "vue-toastification";
 
 const toast = useToast();
