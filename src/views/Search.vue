@@ -101,7 +101,7 @@ watch(page, () => {
             booksMetadata.total,
             page
           )} grid-cols-2 grid-rows-${rowsBase(booksMetadata.total, page)}`"
-          class="grid gap-8"
+          class="grid gap-8 place-items-center"
         >
           <BookCard v-for="book in books" :key="book.id" :book="book" />
         </div>
