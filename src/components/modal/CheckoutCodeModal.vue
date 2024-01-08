@@ -58,7 +58,7 @@ const { validationCode } = storeToRefs(cartStore);
           <div class="flex flex-col px-4 pt-5 pb-4 sm:p-6 sm:pb-4 gap-4">
             <p>This is your order validation code:</p>
             <h3 class="text-center">{{ validationCode }}</h3>
-            <p>You may see this code in My Library -> Order History</p>
+            <p>You can see this code in My Library -> Order History</p>
             <p class="text-sm">
               Note: This validation code will be needed when picking up your
               order!

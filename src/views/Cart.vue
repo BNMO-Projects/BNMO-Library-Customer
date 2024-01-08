@@ -80,7 +80,7 @@ const handleCodeModalClose = () => {
         <div
           class="flex justify-between lg:justify-normal gap-0 lg:gap-8 items-center w-full lg:w-fit"
         >
-          <p class="font-bold">Subtotal</p>
+          <p class="font-bold">Grand total</p>
           <h2 class="font-normal">
             {{
               subtotal.toLocaleString("en-US", {

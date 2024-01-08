@@ -71,9 +71,9 @@ const handleCheckoutCart = async () => {
               <strong>This action cannot be undone!</strong>
             </p>
             <p class="text-sm">
-              Note: Books with <span class="tag-span">BORROWABLE</span> type
-              require admin validations beforehand and may be removed from your
-              final order.
+              Note: Books with
+              <span class="green-tag">BORROWABLE</span> type require admin
+              validations beforehand and may be removed from your final order.
             </p>
           </div>
 
