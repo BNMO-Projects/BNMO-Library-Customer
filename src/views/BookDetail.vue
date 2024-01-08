@@ -47,7 +47,7 @@ const handleAddToWishlist = async (id: string) => {
 <template>
   <RemoveFromWishlistModal
     :is-modal-open="isModalOpen"
-    @close-modal="(value) => (isModalOpen = value)"
+    @close-modal="isModalOpen = false"
   />
   <LoggedLayout>
     <TopHeader />
@@ -64,7 +64,7 @@ const handleAddToWishlist = async (id: string) => {
             <div
               class="flex flex-col lg:flex-row items-center justify-between gap-4"
             >
-              <h1 class="text-center">{{ bookDetail.title }}</h1>
+              <h1>{{ bookDetail.title }}</h1>
               <span class="book-type-tag">
                 {{ bookDetail.book_type }}
               </span>

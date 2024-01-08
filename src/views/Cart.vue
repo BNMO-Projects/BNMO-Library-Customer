@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 
 import { storeToRefs } from "pinia";
 import { useCartStore } from "@/store/cart.store";
@@ -9,10 +9,13 @@ import LoggedLayout from "@/components/global/LoggedLayout.vue";
 import TopHeader from "@/components/global/TopHeader.vue";
 import CartRow from "@/components/cart/CartRow.vue";
 import CartOutline from "@/components/icons/CartOutline.vue";
+import CheckoutConfirmationModal from "@/components/modal/CheckoutConfirmationModal.vue";
 
 const cartStore = useCartStore();
 
 const { cartItems, subtotal, isLoadingAddCartItem } = storeToRefs(cartStore);
+
+const isModalOpen = ref(false);
 
 onMounted(() => {
   cartStore.fetchCartItems();
@@ -20,6 +23,10 @@ onMounted(() => {
 </script>
 
 <template>
+  <CheckoutConfirmationModal
+    :is-modal-open="isModalOpen"
+    @close-modal="isModalOpen = false"
+  />
   <LoggedLayout>
     <TopHeader />
     <FwbSpinner size="12" v-if="isLoadingAddCartItem" />
@@ -70,7 +77,11 @@ onMounted(() => {
         </div>
       </div>
       <div class="flex justify-end items-center mb-12 lg:mb-0">
-        <button type="submit" class="button-full lg:w-1/4">
+        <button
+          type="submit"
+          class="button-full lg:w-1/4"
+          @click="isModalOpen = true"
+        >
           <FwbSpinner v-if="false" />
           Checkout
         </button>

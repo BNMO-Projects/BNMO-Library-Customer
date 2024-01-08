@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { useBookStore } from "@/store/book.store";
-import { useCartStore } from "@/store/cart.store";
-import { useWishlistStore } from "@/store/wishlist.store";
-import { storeToRefs } from "pinia";
 import { toRefs, Transition } from "vue";
+import { useCartStore } from "@/store/cart.store";
+import { storeToRefs } from "pinia";
 
 const props = defineProps({
   isModalOpen: {
@@ -15,23 +13,16 @@ const { isModalOpen } = toRefs(props);
 
 const emit = defineEmits<{ (event: "closeModal"): void }>();
 
-const bookStore = useBookStore();
-const wishlistStore = useWishlistStore();
 const cartStore = useCartStore();
 
-const { bookDetail } = storeToRefs(bookStore);
+const { isErrorCheckoutCart } = storeToRefs(cartStore);
 
-const handleKeepWishlist = async () => {
-  await cartStore.addItemToCart(bookDetail.value.id);
-  bookStore.fetchBookDetails(bookDetail.value.id);
-  emit("closeModal");
-};
-
-const handleRemoveWishlist = async () => {
-  await wishlistStore.removeFromWishlist(bookDetail.value.wishlist_id);
-  await cartStore.addItemToCart(bookDetail.value.id);
-  bookStore.fetchBookDetails(bookDetail.value.id);
-  emit("closeModal");
+const handleCheckoutCart = async () => {
+  await cartStore.checkoutCart();
+  if (!isErrorCheckoutCart.value) {
+    emit("closeModal");
+    cartStore.fetchCartItems();
+  }
 };
 </script>
 
@@ -68,15 +59,19 @@ const handleRemoveWishlist = async () => {
           <div
             class="bg-modal-header-color dark:bg-modal-header-color-dark px-6 py-3 flex"
           >
-            <h3 id="modal-title">Confirm Wishlist Update</h3>
+            <h3 id="modal-title">Confirm Checkout</h3>
           </div>
 
           <!-- Body -->
-          <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="flex flex-col px-4 pt-5 pb-4 sm:p-6 sm:pb-4 gap-4">
             <p>
-              Would you like to remove this item from your wishlist after adding
-              it to the cart? This helps keep your wishlist updated with items
-              you're still interested in.
+              Are you sure you want to proceed this checkout?
+              <strong>This action cannot be undone!</strong>
+            </p>
+            <p class="text-sm">
+              Note: Books with <span class="tag-span">BORROWABLE</span> type
+              require admin validations beforehand and may be removed from your
+              final order.
             </p>
           </div>
 
@@ -85,16 +80,16 @@ const handleRemoveWishlist = async () => {
             <button
               type="button"
               class="button-full lg:w-fit"
-              @click="handleKeepWishlist"
+              @click="$emit('closeModal')"
             >
-              Keep in Wishlist
+              Cancel
             </button>
             <button
               type="button"
-              class="button-red lg:w-fit"
-              @click="handleRemoveWishlist"
+              class="button-green lg:w-fit"
+              @click="handleCheckoutCart"
             >
-              Remove from Wishlist
+              Proceed
             </button>
           </div>
         </div>
