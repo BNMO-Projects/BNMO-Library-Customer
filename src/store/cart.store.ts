@@ -13,6 +13,8 @@ export const useCartStore = defineStore("cart", {
       isLoadingCartItems: false,
       isLoadingAddCartItem: false,
       isLoadingDeleteCartItem: false,
+
+      validationCode: "",
       isLoadingCheckoutCart: false,
       isErrorCheckoutCart: false
     };
@@ -68,12 +70,14 @@ export const useCartStore = defineStore("cart", {
     },
 
     async checkoutCart() {
+      this.validationCode = "";
       this.isLoadingCheckoutCart = true;
       this.isErrorCheckoutCart = false;
       try {
         const response = await axios.post(`/cart/checkout`);
 
         this.isLoadingCheckoutCart = false;
+        this.validationCode = response.data.code;
         toast.success(response.data.message);
       } catch (error) {
         if (error instanceof AxiosError) {

@@ -11,21 +11,11 @@ const props = defineProps({
 
 const { isModalOpen } = toRefs(props);
 
-const emit = defineEmits<{
-  (event: "closeModal"): void;
-  (event: "checkoutSuccess"): void;
-}>();
+const emit = defineEmits<{ (event: "closeModal"): void }>();
 
 const cartStore = useCartStore();
 
-const { validationCode, isErrorCheckoutCart } = storeToRefs(cartStore);
-
-const handleCheckoutCart = async () => {
-  await cartStore.checkoutCart();
-  if (!isErrorCheckoutCart.value && validationCode.value.length > 0) {
-    emit("checkoutSuccess");
-  }
-};
+const { validationCode } = storeToRefs(cartStore);
 </script>
 
 <template>
@@ -61,19 +51,17 @@ const handleCheckoutCart = async () => {
           <div
             class="bg-modal-header-color dark:bg-modal-header-color-dark px-6 py-3 flex"
           >
-            <h3 id="modal-title">Confirm Checkout</h3>
+            <h3 id="modal-title">Order Validation Code</h3>
           </div>
 
           <!-- Body -->
           <div class="flex flex-col px-4 pt-5 pb-4 sm:p-6 sm:pb-4 gap-4">
-            <p>
-              Are you sure you want to proceed this checkout?
-              <strong>This action cannot be undone!</strong>
-            </p>
+            <p>This is your order validation code:</p>
+            <h3 class="text-center">{{ validationCode }}</h3>
+            <p>You may see this code in My Library -> Order History</p>
             <p class="text-sm">
-              Note: Books with <span class="tag-span">BORROWABLE</span> type
-              require admin validations beforehand and may be removed from your
-              final order.
+              Note: This validation code will be needed when picking up your
+              order!
             </p>
           </div>
 
@@ -81,17 +69,10 @@ const handleCheckoutCart = async () => {
           <div class="px-4 py-3 flex flex-col lg:flex-row justify-end gap-2">
             <button
               type="button"
-              class="button-full lg:w-fit"
+              class="button-red lg:w-fit"
               @click="$emit('closeModal')"
             >
-              Cancel
-            </button>
-            <button
-              type="button"
-              class="button-green lg:w-fit"
-              @click="handleCheckoutCart"
-            >
-              Proceed
+              Close
             </button>
           </div>
         </div>

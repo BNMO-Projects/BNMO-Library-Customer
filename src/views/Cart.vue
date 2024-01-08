@@ -10,22 +10,39 @@ import TopHeader from "@/components/global/TopHeader.vue";
 import CartRow from "@/components/cart/CartRow.vue";
 import CartOutline from "@/components/icons/CartOutline.vue";
 import CheckoutConfirmationModal from "@/components/modal/CheckoutConfirmationModal.vue";
+import CheckoutCodeModal from "@/components/modal/CheckoutCodeModal.vue";
 
 const cartStore = useCartStore();
 
 const { cartItems, subtotal, isLoadingAddCartItem } = storeToRefs(cartStore);
 
-const isModalOpen = ref(false);
+const isConfirmationModalOpen = ref(false);
+const isCodeModalOpen = ref(false);
 
 onMounted(() => {
   cartStore.fetchCartItems();
 });
+
+const handleCheckoutSuccess = () => {
+  isConfirmationModalOpen.value = false;
+  isCodeModalOpen.value = true;
+};
+
+const handleCodeModalClose = () => {
+  isCodeModalOpen.value = false;
+  cartStore.fetchCartItems();
+};
 </script>
 
 <template>
   <CheckoutConfirmationModal
-    :is-modal-open="isModalOpen"
-    @close-modal="isModalOpen = false"
+    :is-modal-open="isConfirmationModalOpen"
+    @close-modal="isConfirmationModalOpen = false"
+    @checkout-success="handleCheckoutSuccess"
+  />
+  <CheckoutCodeModal
+    :is-modal-open="isCodeModalOpen"
+    @close-modal="handleCodeModalClose"
   />
   <LoggedLayout>
     <TopHeader />
@@ -80,7 +97,7 @@ onMounted(() => {
         <button
           type="submit"
           class="button-full lg:w-1/4"
-          @click="isModalOpen = true"
+          @click="isConfirmationModalOpen = true"
         >
           <FwbSpinner v-if="false" />
           Checkout

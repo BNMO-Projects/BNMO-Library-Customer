@@ -84,7 +84,10 @@ const handleAddToCart = async (id: string) => {
         <RouterLink :to="'/book-detail/' + wishlist.book_id">
           <button class="button-full">See Details</button>
         </RouterLink>
-        <button v-if="!wishlist.in_cart" class="button-full w-fit">
+        <button
+          v-if="!wishlist.in_cart && wishlist.current_stock > 0"
+          class="button-full w-fit"
+        >
           <component :is="CartPlusSolid" custom-class="text-white" />
           <p v-if="wishlist.price" @click="handleAddToCart(wishlist.book_id)">
             Add to cart for
@@ -98,12 +101,19 @@ const handleAddToCart = async (id: string) => {
           </p>
           <p v-else @click="handleAddToCart(wishlist.book_id)">Add to cart</p>
         </button>
-        <RouterLink v-else :to="{ name: 'Cart' }">
-          <button class="button-full lg:w-fit">
+        <RouterLink
+          v-else-if="wishlist.in_cart && wishlist.current_stock > 0"
+          :to="{ name: 'Cart' }"
+        >
+          <button class="button-full w-fit">
             <component :is="CartPlusSolid" custom-class="text-white" />
             <p>View in cart</p>
           </button>
         </RouterLink>
+        <button v-else class="button-red w-fit" disabled>
+          <component :is="CartPlusSolid" custom-class="text-white" />
+          <p>Out of stock</p>
+        </button>
       </div>
     </div>
   </div>
@@ -133,7 +143,10 @@ const handleAddToCart = async (id: string) => {
       <RouterLink :to="'/book-detail/' + wishlist.book_id">
         <button class="button-full">See Details</button>
       </RouterLink>
-      <button v-if="!wishlist.in_cart" class="button-full">
+      <button
+        v-if="!wishlist.in_cart && wishlist.current_stock > 0"
+        class="button-full"
+      >
         <component :is="CartPlusSolid" custom-class="text-white" />
         <p v-if="wishlist.price" @click="handleAddToCart(wishlist.book_id)">
           Add to cart for Rp
@@ -141,12 +154,19 @@ const handleAddToCart = async (id: string) => {
         </p>
         <p v-else @click="handleAddToCart(wishlist.book_id)">Add to cart</p>
       </button>
-      <RouterLink v-else :to="{ name: 'Cart' }">
-        <button class="button-full lg:w-fit">
+      <RouterLink
+        v-else-if="wishlist.in_cart && wishlist.current_stock > 0"
+        :to="{ name: 'Cart' }"
+      >
+        <button class="button-full">
           <component :is="CartPlusSolid" custom-class="text-white" />
           <p>View in cart</p>
         </button>
       </RouterLink>
+      <button v-else class="button-red" disabled>
+        <component :is="CartPlusSolid" custom-class="text-white" />
+        <p>Out of stock</p>
+      </button>
     </div>
   </div>
 </template>

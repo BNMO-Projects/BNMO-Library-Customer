@@ -91,13 +91,17 @@ const handleAddToWishlist = async (id: string) => {
                   query: { page: 1 },
                   params: { tab: 'Wishlist' }
                 }"
+                class="w-full lg:w-fit"
               >
-                <button class="button-full lg:w-fit">
+                <button class="button-full">
                   <component :is="HeartSolid" custom-class="text-white" />
                   <p>View in wishlist</p>
                 </button>
               </RouterLink>
-              <button v-if="!bookDetail.in_cart" class="button-full lg:w-fit">
+              <button
+                v-if="!bookDetail.in_cart && bookDetail.current_stock > 0"
+                class="button-full lg:w-fit"
+              >
                 <component :is="CartPlusSolid" custom-class="text-white" />
                 <p
                   v-if="bookDetail.price"
@@ -116,12 +120,19 @@ const handleAddToWishlist = async (id: string) => {
                   Add to cart
                 </p>
               </button>
-              <RouterLink v-else :to="{ name: 'Cart' }">
+              <RouterLink
+                v-else-if="bookDetail.in_cart && bookDetail.current_stock > 0"
+                :to="{ name: 'Cart' }"
+              >
                 <button class="button-full lg:w-fit">
                   <component :is="CartPlusSolid" custom-class="text-white" />
                   <p>View in cart</p>
                 </button>
               </RouterLink>
+              <button v-else class="button-red lg:w-fit" disabled>
+                <component :is="CartPlusSolid" custom-class="text-white" />
+                <p>Out of stock</p>
+              </button>
               <p class="font-bold">
                 Stock: {{ bookDetail.current_stock }} /
                 {{ bookDetail.original_stock }}
