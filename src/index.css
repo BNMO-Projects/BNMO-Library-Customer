@@ -33,8 +33,16 @@ body {
     @apply bg-green-500 dark:bg-green-700 hover:bg-green-600 dark:hover:bg-green-800 w-full text-base font-bold rounded-lg px-4 py-2 inline-flex items-center justify-center gap-2 text-white disabled:cursor-not-allowed;
   }
 
-  .tag-span {
+  .green-tag {
     @apply bg-tag-color dark:bg-tag-color-dark text-sm px-2 rounded-md text-black dark:text-white;
+  }
+
+  .yellow-tag {
+    @apply bg-yellow-300 dark:bg-yellow-500 text-sm px-2 rounded-md text-black dark:text-white;
+  }
+
+  .blue-tag {
+    @apply bg-blue-400 dark:bg-blue-500 text-sm px-2 rounded-md text-black dark:text-white;
   }
 
   .book-type-tag {

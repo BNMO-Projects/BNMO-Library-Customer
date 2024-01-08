@@ -140,15 +140,15 @@ const handleAddToWishlist = async (id: string) => {
             </div>
             <div class="flex flex-col flex-wrap lg:flex-row gap-4 items-center">
               <div class="flex gap-4 items-center">
-                <span class="tag-span">
+                <span class="green-tag">
                   {{ bookDetail.category_name }}
                 </span>
 
-                <span class="tag-span">
+                <span class="green-tag">
                   {{ bookDetail.genre_name }}
                 </span>
 
-                <span class="tag-span">
+                <span class="green-tag">
                   {{ bookDetail.language_name }}
                 </span>
               </div>

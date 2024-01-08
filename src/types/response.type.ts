@@ -90,3 +90,21 @@ export type WishlistResponse = {
   in_cart: boolean;
   cart_item_id: string | null;
 };
+
+export type OrderHistoryCartItemResponse = {
+  price: number | null;
+  status: string | null;
+  book_id: string;
+  title: string;
+  book_cover: string;
+  book_type: string;
+  author_name: string;
+};
+
+export type OrderHistoryResponse = {
+  id: string;
+  validation_code: string;
+  status: string;
+  created_at: Date;
+  cart_items: Array<OrderHistoryCartItemResponse>;
+};

@@ -61,15 +61,15 @@ const handleAddToCart = async (id: string) => {
       </div>
       <div class="flex justify-between">
         <div class="flex gap-4 items-center">
-          <span class="tag-span">
+          <span class="green-tag">
             {{ wishlist.category_name }}
           </span>
 
-          <span class="tag-span">
+          <span class="green-tag">
             {{ wishlist.genre_name }}
           </span>
 
-          <span class="tag-span">
+          <span class="green-tag">
             {{ wishlist.language_name }}
           </span>
         </div>
@@ -134,7 +134,7 @@ const handleAddToCart = async (id: string) => {
           Stock: {{ wishlist.current_stock }} /
           {{ wishlist.original_stock }}
         </p>
-        <span class="tag-span w-fit font-bold">
+        <span class="green-tag w-fit font-bold">
           {{ wishlist.book_type }}
         </span>
       </div>

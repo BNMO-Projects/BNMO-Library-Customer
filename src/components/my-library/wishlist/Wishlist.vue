@@ -7,7 +7,7 @@ import { useWishlistStore } from "@/store/wishlist.store";
 import { WishlistSearchQuery } from "@/types/request.type";
 
 import { FwbInput, FwbSpinner, FwbPagination, FwbSelect } from "flowbite-vue";
-import WishlistCard from "@/components/my-library/WishlistCard.vue";
+import WishlistCard from "@/components/my-library/wishlist/WishlistCard.vue";
 import SearchLoopOutline from "@/components/icons/SearchLoopOutline.vue";
 import HeartOutline from "@/components/icons/HeartOutline.vue";
 
