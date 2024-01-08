@@ -28,7 +28,6 @@ axios.interceptors.response.use(
   async function (error) {
     if (error instanceof AxiosError) {
       const authStore = useAuthStore();
-      console.log(error.request.responseURL);
       if (
         error.request.responseURL.includes("/refresh-token") &&
         error.response?.status === 401

@@ -20,7 +20,9 @@ defineProps({
         :alt="book.id"
         class="rounded-md h-48 lg:h-fit"
       />
-      <p class="font-bold line-clamp-2 lg:truncate">{{ book.title }}</p>
+      <p class="font-bold line-clamp-2 lg:line-clamp-none lg:truncate">
+        {{ book.title }}
+      </p>
       <p>{{ book.author_name }}</p>
     </div>
   </RouterLink>

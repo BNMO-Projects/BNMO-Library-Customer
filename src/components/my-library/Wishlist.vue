@@ -112,7 +112,12 @@ watch(page, () => {
     </div>
 
     <div class="flex flex-col w-full gap-4">
-      <WishlistCard v-for="item in wishlist" :key="item.id" :wishlist="item" />
+      <WishlistCard
+        v-for="item in wishlist"
+        :key="item.id"
+        :wishlist="item"
+        :query="query"
+      />
     </div>
     <div class="flex w-full items-center justify-center mb-12 lg:mb-0">
       <FwbPagination

@@ -25,6 +25,14 @@ body {
     @apply bg-secondary-color dark:bg-secondary-color-dark hover:bg-hover-color dark:hover:bg-hover-color-dark w-full text-base font-bold rounded-lg px-4 py-2 inline-flex items-center justify-center gap-2 text-white disabled:cursor-not-allowed;
   }
 
+  .button-red {
+    @apply bg-red-600 dark:bg-red-800 hover:bg-red-700 dark:hover:bg-red-900 w-full text-base font-bold rounded-lg px-4 py-2 inline-flex items-center justify-center gap-2 text-white disabled:cursor-not-allowed;
+  }
+
+  .button-green {
+    @apply bg-green-500 dark:bg-green-700 hover:bg-green-600 dark:hover:bg-green-800 w-full text-base font-bold rounded-lg px-4 py-2 inline-flex items-center justify-center gap-2 text-white disabled:cursor-not-allowed;
+  }
+
   .tag-span {
     @apply bg-tag-color dark:bg-tag-color-dark text-sm px-2 rounded-md text-black dark:text-white;
   }

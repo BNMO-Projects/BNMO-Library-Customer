@@ -87,4 +87,6 @@ export type WishlistResponse = {
   category_name: string;
   genre_name: string;
   language_name: string;
+  in_cart: boolean;
+  cart_item_id: string | null;
 };
