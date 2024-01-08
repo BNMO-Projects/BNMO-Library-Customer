@@ -1,19 +1,30 @@
 <script setup lang="ts">
+import { toRefs } from "vue";
 import { useCartStore } from "@/store/cart.store";
+import { useWishlistStore } from "@/store/wishlist.store";
 import { WishlistResponse } from "@/types/response.type";
 import CartPlusSolid from "@/components/icons/CartPlusSolid.vue";
+import { WishlistSearchQuery } from "@/types/request.type";
 
-defineProps({
+const props = defineProps({
   wishlist: {
     type: Object as () => WishlistResponse,
+    required: true
+  },
+  query: {
+    type: Object as () => WishlistSearchQuery,
     required: true
   }
 });
 
-const cartStore = useCartStore();
+const { query } = toRefs(props);
 
-const handleAddToCart = (id: string) => {
-  cartStore.addItemToCart(id);
+const cartStore = useCartStore();
+const wishlistStore = useWishlistStore();
+
+const handleAddToCart = async (id: string) => {
+  await cartStore.addItemToCart(id);
+  wishlistStore.fetchWishlist(query.value);
 };
 </script>
 
@@ -50,15 +61,15 @@ const handleAddToCart = (id: string) => {
       </div>
       <div class="flex justify-between">
         <div class="flex gap-4 items-center">
-          <span class="tag-span">
+          <span class="green-tag">
             {{ wishlist.category_name }}
           </span>
 
-          <span class="tag-span">
+          <span class="green-tag">
             {{ wishlist.genre_name }}
           </span>
 
-          <span class="tag-span">
+          <span class="green-tag">
             {{ wishlist.language_name }}
           </span>
         </div>
@@ -73,7 +84,10 @@ const handleAddToCart = (id: string) => {
         <RouterLink :to="'/book-detail/' + wishlist.book_id">
           <button class="button-full">See Details</button>
         </RouterLink>
-        <button class="button-full w-fit">
+        <button
+          v-if="!wishlist.in_cart && wishlist.current_stock > 0"
+          class="button-full w-fit"
+        >
           <component :is="CartPlusSolid" custom-class="text-white" />
           <p v-if="wishlist.price" @click="handleAddToCart(wishlist.book_id)">
             Add to cart for
@@ -87,14 +101,27 @@ const handleAddToCart = (id: string) => {
           </p>
           <p v-else @click="handleAddToCart(wishlist.book_id)">Add to cart</p>
         </button>
+        <RouterLink
+          v-else-if="wishlist.in_cart && wishlist.current_stock > 0"
+          :to="{ name: 'Cart' }"
+        >
+          <button class="button-full w-fit">
+            <component :is="CartPlusSolid" custom-class="text-white" />
+            <p>View in cart</p>
+          </button>
+        </RouterLink>
+        <button v-else class="button-red w-fit" disabled>
+          <component :is="CartPlusSolid" custom-class="text-white" />
+          <p>Out of stock</p>
+        </button>
       </div>
     </div>
   </div>
 
   <div
-    class="flex lg:hidden flex-col rounded-md p-4 gap-4 bg-container-color shadow-md"
+    class="flex lg:hidden flex-col rounded-md p-4 gap-4 bg-container-color dark:bg-container-color-dark shadow-md"
   >
-    <div class="flex w-full gap-2">
+    <div class="flex w-full gap-2 items-center">
       <img
         :src="wishlist.book_cover"
         :alt="wishlist.id"
@@ -107,7 +134,7 @@ const handleAddToCart = (id: string) => {
           Stock: {{ wishlist.current_stock }} /
           {{ wishlist.original_stock }}
         </p>
-        <span class="tag-span w-fit font-bold">
+        <span class="green-tag w-fit font-bold">
           {{ wishlist.book_type }}
         </span>
       </div>
@@ -116,13 +143,29 @@ const handleAddToCart = (id: string) => {
       <RouterLink :to="'/book-detail/' + wishlist.book_id">
         <button class="button-full">See Details</button>
       </RouterLink>
-      <button class="button-full">
+      <button
+        v-if="!wishlist.in_cart && wishlist.current_stock > 0"
+        class="button-full"
+      >
         <component :is="CartPlusSolid" custom-class="text-white" />
         <p v-if="wishlist.price" @click="handleAddToCart(wishlist.book_id)">
           Add to cart for Rp
           {{ (wishlist.price / 1000).toFixed(1) + "K" }}
         </p>
         <p v-else @click="handleAddToCart(wishlist.book_id)">Add to cart</p>
+      </button>
+      <RouterLink
+        v-else-if="wishlist.in_cart && wishlist.current_stock > 0"
+        :to="{ name: 'Cart' }"
+      >
+        <button class="button-full">
+          <component :is="CartPlusSolid" custom-class="text-white" />
+          <p>View in cart</p>
+        </button>
+      </RouterLink>
+      <button v-else class="button-red" disabled>
+        <component :is="CartPlusSolid" custom-class="text-white" />
+        <p>Out of stock</p>
       </button>
     </div>
   </div>

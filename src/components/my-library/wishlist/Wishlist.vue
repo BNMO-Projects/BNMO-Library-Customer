@@ -7,7 +7,7 @@ import { useWishlistStore } from "@/store/wishlist.store";
 import { WishlistSearchQuery } from "@/types/request.type";
 
 import { FwbInput, FwbSpinner, FwbPagination, FwbSelect } from "flowbite-vue";
-import WishlistCard from "@/components/my-library/WishlistCard.vue";
+import WishlistCard from "@/components/my-library/wishlist/WishlistCard.vue";
 import SearchLoopOutline from "@/components/icons/SearchLoopOutline.vue";
 import HeartOutline from "@/components/icons/HeartOutline.vue";
 
@@ -112,7 +112,12 @@ watch(page, () => {
     </div>
 
     <div class="flex flex-col w-full gap-4">
-      <WishlistCard v-for="item in wishlist" :key="item.id" :wishlist="item" />
+      <WishlistCard
+        v-for="item in wishlist"
+        :key="item.id"
+        :wishlist="item"
+        :query="query"
+      />
     </div>
     <div class="flex w-full items-center justify-center mb-12 lg:mb-0">
       <FwbPagination

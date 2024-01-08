@@ -17,13 +17,17 @@ export default {
         "tag-color": "#97BC62",
         "container-color": "#EBEBEB",
         "extra-color": "#FFA07A",
+        "modal-color": "#CCCCCC",
+        "modal-header-color": "#B0B0B0",
         "text-color-dark": "#E0E0E0",
         "main-color-dark": "#121212",
         "secondary-color-dark": "#1E3A5F",
         "hover-color-dark": "#2B5178",
         "tag-color-dark": "#748B47",
         "container-color-dark": "#1E1E1E",
-        "extra-color-dark": "#CC7B66"
+        "extra-color-dark": "#CC7B66",
+        "modal-color-dark": "#262626",
+        "modal-header-color-dark": "#333333"
       },
       screens: {
         "3xl": "1920px"

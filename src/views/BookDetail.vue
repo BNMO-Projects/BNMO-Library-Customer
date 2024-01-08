@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { router } from "@/router/router";
 
 import { storeToRefs } from "pinia";
@@ -12,12 +12,15 @@ import TopHeader from "@/components/global/TopHeader.vue";
 import LoggedLayout from "@/components/global/LoggedLayout.vue";
 import HeartSolid from "@/components/icons/HeartSolid.vue";
 import CartPlusSolid from "@/components/icons/CartPlusSolid.vue";
+import RemoveFromWishlistModal from "@/components/modal/RemoveFromWishlistModal.vue";
 
 const bookStore = useBookStore();
 const cartStore = useCartStore();
 const wishlistStore = useWishlistStore();
 
 const { bookDetail, isLoadingBookDetail } = storeToRefs(bookStore);
+
+const isModalOpen = ref(false);
 
 onMounted(async () => {
   await bookStore.fetchBookDetails(
@@ -27,27 +30,25 @@ onMounted(async () => {
 });
 
 const handleAddToCart = async (id: string) => {
-  await cartStore.addItemToCart(id);
-  bookStore.fetchBookDetails(bookDetail.value.id);
-};
-
-const handleRemoveFromCart = async (id: string) => {
-  await cartStore.removeItemFromCart(id);
-  bookStore.fetchBookDetails(bookDetail.value.id);
+  if (bookDetail.value.in_wishlist) {
+    isModalOpen.value = true;
+  } else {
+    await cartStore.addItemToCart(id);
+    bookStore.fetchBookDetails(bookDetail.value.id);
+  }
 };
 
 const handleAddToWishlist = async (id: string) => {
   await wishlistStore.addToWishlist(id);
   bookStore.fetchBookDetails(bookDetail.value.id);
 };
-
-const handleRemoveFromWishlist = async (id: string) => {
-  await wishlistStore.removeFromWishlist(id);
-  bookStore.fetchBookDetails(bookDetail.value.id);
-};
 </script>
 
 <template>
+  <RemoveFromWishlistModal
+    :is-modal-open="isModalOpen"
+    @close-modal="isModalOpen = false"
+  />
   <LoggedLayout>
     <TopHeader />
     <div class="flex justify-center">
@@ -63,7 +64,7 @@ const handleRemoveFromWishlist = async (id: string) => {
             <div
               class="flex flex-col lg:flex-row items-center justify-between gap-4"
             >
-              <h1 class="text-center">{{ bookDetail.title }}</h1>
+              <h1>{{ bookDetail.title }}</h1>
               <span class="book-type-tag">
                 {{ bookDetail.book_type }}
               </span>
@@ -83,15 +84,24 @@ const handleRemoveFromWishlist = async (id: string) => {
                 <component :is="HeartSolid" custom-class="text-white" />
                 Add to wishlist
               </button>
-              <button
+              <RouterLink
                 v-else
-                class="button-full lg:w-fit"
-                @click="handleRemoveFromWishlist(bookDetail.wishlist_id)"
+                :to="{
+                  name: 'My Library',
+                  query: { page: 1 },
+                  params: { tab: 'Wishlist' }
+                }"
+                class="w-full lg:w-fit"
               >
-                <component :is="HeartSolid" custom-class="text-white" />
-                Remove from wishlist
-              </button>
-              <button v-if="!bookDetail.in_cart" class="button-full lg:w-fit">
+                <button class="button-full">
+                  <component :is="HeartSolid" custom-class="text-white" />
+                  <p>View in wishlist</p>
+                </button>
+              </RouterLink>
+              <button
+                v-if="!bookDetail.in_cart && bookDetail.current_stock > 0"
+                class="button-full lg:w-fit"
+              >
                 <component :is="CartPlusSolid" custom-class="text-white" />
                 <p
                   v-if="bookDetail.price"
@@ -110,11 +120,18 @@ const handleRemoveFromWishlist = async (id: string) => {
                   Add to cart
                 </p>
               </button>
-              <button v-else class="button-full lg:w-fit">
+              <RouterLink
+                v-else-if="bookDetail.in_cart && bookDetail.current_stock > 0"
+                :to="{ name: 'Cart' }"
+              >
+                <button class="button-full lg:w-fit">
+                  <component :is="CartPlusSolid" custom-class="text-white" />
+                  <p>View in cart</p>
+                </button>
+              </RouterLink>
+              <button v-else class="button-red lg:w-fit" disabled>
                 <component :is="CartPlusSolid" custom-class="text-white" />
-                <p @click="handleRemoveFromCart(bookDetail.cart_item_id)">
-                  Remove from cart
-                </p>
+                <p>Out of stock</p>
               </button>
               <p class="font-bold">
                 Stock: {{ bookDetail.current_stock }} /
@@ -123,15 +140,15 @@ const handleRemoveFromWishlist = async (id: string) => {
             </div>
             <div class="flex flex-col flex-wrap lg:flex-row gap-4 items-center">
               <div class="flex gap-4 items-center">
-                <span class="tag-span">
+                <span class="green-tag">
                   {{ bookDetail.category_name }}
                 </span>
 
-                <span class="tag-span">
+                <span class="green-tag">
                   {{ bookDetail.genre_name }}
                 </span>
 
-                <span class="tag-span">
+                <span class="green-tag">
                   {{ bookDetail.language_name }}
                 </span>
               </div>

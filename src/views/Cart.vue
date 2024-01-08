@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 
 import { storeToRefs } from "pinia";
 import { useCartStore } from "@/store/cart.store";
@@ -9,17 +9,41 @@ import LoggedLayout from "@/components/global/LoggedLayout.vue";
 import TopHeader from "@/components/global/TopHeader.vue";
 import CartRow from "@/components/cart/CartRow.vue";
 import CartOutline from "@/components/icons/CartOutline.vue";
+import CheckoutConfirmationModal from "@/components/modal/CheckoutConfirmationModal.vue";
+import CheckoutCodeModal from "@/components/modal/CheckoutCodeModal.vue";
 
 const cartStore = useCartStore();
 
 const { cartItems, subtotal, isLoadingAddCartItem } = storeToRefs(cartStore);
 
+const isConfirmationModalOpen = ref(false);
+const isCodeModalOpen = ref(false);
+
 onMounted(() => {
   cartStore.fetchCartItems();
 });
+
+const handleCheckoutSuccess = () => {
+  isConfirmationModalOpen.value = false;
+  isCodeModalOpen.value = true;
+};
+
+const handleCodeModalClose = () => {
+  isCodeModalOpen.value = false;
+  cartStore.fetchCartItems();
+};
 </script>
 
 <template>
+  <CheckoutConfirmationModal
+    :is-modal-open="isConfirmationModalOpen"
+    @close-modal="isConfirmationModalOpen = false"
+    @checkout-success="handleCheckoutSuccess"
+  />
+  <CheckoutCodeModal
+    :is-modal-open="isCodeModalOpen"
+    @close-modal="handleCodeModalClose"
+  />
   <LoggedLayout>
     <TopHeader />
     <FwbSpinner size="12" v-if="isLoadingAddCartItem" />
@@ -56,7 +80,7 @@ onMounted(() => {
         <div
           class="flex justify-between lg:justify-normal gap-0 lg:gap-8 items-center w-full lg:w-fit"
         >
-          <p class="font-bold">Subtotal</p>
+          <p class="font-bold">Grand total</p>
           <h2 class="font-normal">
             {{
               subtotal.toLocaleString("en-US", {
@@ -70,7 +94,11 @@ onMounted(() => {
         </div>
       </div>
       <div class="flex justify-end items-center mb-12 lg:mb-0">
-        <button type="submit" class="button-full lg:w-1/4">
+        <button
+          type="submit"
+          class="button-full lg:w-1/4"
+          @click="isConfirmationModalOpen = true"
+        >
           <FwbSpinner v-if="false" />
           Checkout
         </button>
