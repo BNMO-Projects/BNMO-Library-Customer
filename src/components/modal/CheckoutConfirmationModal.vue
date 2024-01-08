@@ -2,6 +2,7 @@
 import { toRefs, Transition } from "vue";
 import { useCartStore } from "@/store/cart.store";
 import { storeToRefs } from "pinia";
+import { FwbSpinner } from "flowbite-vue";
 
 const props = defineProps({
   isModalOpen: {
@@ -18,7 +19,8 @@ const emit = defineEmits<{
 
 const cartStore = useCartStore();
 
-const { validationCode, isErrorCheckoutCart } = storeToRefs(cartStore);
+const { validationCode, isLoadingCheckoutCart, isErrorCheckoutCart } =
+  storeToRefs(cartStore);
 
 const handleCheckoutCart = async () => {
   await cartStore.checkoutCart();
@@ -91,6 +93,7 @@ const handleCheckoutCart = async () => {
               class="button-green lg:w-fit"
               @click="handleCheckoutCart"
             >
+              <FwbSpinner v-if="isLoadingCheckoutCart" />
               Proceed
             </button>
           </div>

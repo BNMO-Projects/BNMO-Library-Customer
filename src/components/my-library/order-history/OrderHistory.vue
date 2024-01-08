@@ -4,7 +4,7 @@ import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useOrderHistoryStore } from "@/store/orderhistory.store";
 
-import { FwbAccordion } from "flowbite-vue";
+import { FwbSpinner, FwbAccordion } from "flowbite-vue";
 import InboxOutline from "@/components/icons/InboxOutline.vue";
 import OrderHistoryItem from "@/components/my-library/order-history/OrderHistoryItem.vue";
 
