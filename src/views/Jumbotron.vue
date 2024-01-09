@@ -236,7 +236,7 @@ onUnmounted(() => {
       </div>
     </section>
     <footer
-      class="flex flex-col lg:flex-row justify-center lg:justify-between items-center bg-secondary-color dark:bg-secondary-color-dark p-8 font-bold gap-8"
+      class="flex flex-col lg:flex-row justify-center lg:justify-between items-center bg-secondary-color dark:bg-secondary-color-dark text-text-color-dark p-8 font-bold gap-8"
     >
       <p>
         &#169; {{ new Date().getFullYear() }}
