@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onUnmounted, ref } from "vue";
 
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/store/auth.store";
@@ -22,11 +22,19 @@ const handleLogin = () => {
   authStore.postLogin(form.value);
 };
 
+const watchColorScheme = (event: MediaQueryListEvent) => {
+  darkMode.value = event.matches ? true : false;
+};
+
 window
   .matchMedia("(prefers-color-scheme: dark)")
-  .addEventListener("change", (event) => {
-    darkMode.value = event.matches ? true : false;
-  });
+  .addEventListener("change", watchColorScheme);
+
+onUnmounted(() => {
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .removeEventListener("change", watchColorScheme);
+});
 </script>
 
 <template>
@@ -53,13 +61,13 @@ window
         v-if="!darkMode"
         src="/images/logo.webp"
         alt="BNMO logo"
-        class="w-32 fixed top-4 right-4 lg:top-8 lg:right-8"
+        class="w-40 fixed top-4 right-4 lg:top-8 lg:right-8"
       />
       <img
         v-else
         src="/images/logo-white.webp"
         alt="BNMO logo"
-        class="w-32 fixed top-4 right-4 lg:top-8 lg:right-8"
+        class="w-40 fixed top-4 right-4 lg:top-8 lg:right-8"
       />
 
       <form

@@ -48,7 +48,7 @@ const enableActiveRoute = (name: string) => {
     class="bg-secondary-color text-white w-1/6 h-screen hidden lg:block lg:fixed left-0 top-0 dark:bg-secondary-color-dark"
   >
     <div class="p-4 h-full">
-      <img src="/images/logo-white.webp" alt="BNMO Logo" class="w-32 mb-8" />
+      <img src="/images/logo-white.webp" alt="BNMO Logo" class="w-40 mb-8" />
       <div class="flex flex-col gap-2">
         <RouterLink
           v-for="route in routes"
