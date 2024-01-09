@@ -6,6 +6,27 @@ body {
   font-family: "Inter", cursive;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #ebebeb;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #34568b;
+  border-radius: 9999px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #5b7db1;
+}
+
 @layer base {
   h1 {
     @apply font-extrabold text-4xl md:text-5xl;
@@ -21,6 +42,10 @@ body {
 }
 
 @layer components {
+  .button-jumbotron {
+    @apply bg-secondary-color dark:bg-secondary-color-dark hover:bg-hover-color dark:hover:bg-hover-color-dark w-32 lg:w-64 text-2xl font-bold rounded-lg py-2  text-white disabled:cursor-not-allowed;
+  }
+
   .button-full {
     @apply bg-secondary-color dark:bg-secondary-color-dark hover:bg-hover-color dark:hover:bg-hover-color-dark w-full text-base font-bold rounded-lg px-4 py-2 inline-flex items-center justify-center gap-2 text-white disabled:cursor-not-allowed;
   }
