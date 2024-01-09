@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
 // Public views
+const Jumbotron = () => import("@/views/Jumbotron.vue");
 const Login = () => import("@/views/Login.vue");
 const Register = () => import("@/views/Register.vue");
 
@@ -11,6 +12,12 @@ const MyLibrary = () => import("@/views/MyLibrary.vue");
 const Cart = () => import("@/views/Cart.vue");
 
 const routes: RouteRecordRaw[] = [
+  {
+    path: "/",
+    name: "Jumbotron",
+    component: Jumbotron,
+    meta: { title: "BNMO Library" }
+  },
   {
     path: "/login",
     name: "Login",
