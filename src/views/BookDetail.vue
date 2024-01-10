@@ -23,6 +23,7 @@ const { bookDetail, isLoadingBookDetail } = storeToRefs(bookStore);
 const isModalOpen = ref(false);
 
 onMounted(async () => {
+  await router.isReady();
   await bookStore.fetchBookDetails(
     router.currentRoute.value.params.id as string
   );
